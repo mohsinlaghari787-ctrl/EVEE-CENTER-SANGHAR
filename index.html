@@ -1,682 +1,251 @@
+from pathlib import Path
 
-<!DOCTYPE html>
+html = r'''<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Evee Center Sanghar</title>
-
 <style>
-:root {
-  --green: #16813a;
-  --dark: #10572b;
-  --light: #eaf6ed;
-  --red: #c62828;
-  --border: #d9e2dc;
-}
-* { box-sizing: border-box; }
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f3f6f4;
-  color: #202820;
-}
-header {
-  background: var(--green);
-  color: white;
-  padding: 18px;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-.logo {
-  width: 72px;
-  height: 72px;
-  flex-shrink: 0;
-  border-radius: 50%;
-  background: white;
-  color: var(--green);
-  border: 4px solid #a9e6b6;
-  display: grid;
-  place-items: center;
-  font-size: 27px;
-  font-weight: bold;
-}
-header h1 { margin: 0 0 6px; font-size: 23px; }
-header p { margin: 0; }
-nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  background: white;
-  padding: 10px;
-  border-bottom: 1px solid var(--border);
-}
-button, .navbtn {
-  cursor: pointer;
-  border: 0;
-  border-radius: 6px;
-  padding: 10px 13px;
-  font-weight: bold;
-}
-.navbtn { background: var(--light); color: var(--dark); }
-.navbtn.active, .primary { background: var(--green); color: white; }
-.danger { background: #ffebee; color: var(--red); }
-.secondary { background: #e9ecef; color: #222; }
-main { padding: 16px; max-width: 1400px; margin: auto; }
-.panel {
-  background: white;
-  padding: 18px;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  margin-bottom: 16px;
-}
-h2 { margin-top: 0; color: var(--dark); }
-.cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit,minmax(150px,1fr));
-  gap: 12px;
-  margin-bottom: 16px;
-}
-.metric {
-  padding: 17px;
-  background: var(--light);
-  border-radius: 8px;
-}
-.metric strong { display: block; font-size: 23px; margin-top: 8px; }
-form .fields {
-  display: grid;
-  grid-template-columns: repeat(auto-fit,minmax(190px,1fr));
-  gap: 12px;
-}
-label { display: block; font-size: 13px; font-weight: bold; }
-input, select, textarea {
-  display: block;
-  width: 100%;
-  padding: 11px;
-  margin-top: 6px;
-  margin-bottom: 12px;
-  border: 1px solid #cbd5ce;
-  border-radius: 6px;
-  background: white;
-  font: inherit;
-}
-.actions { display: flex; flex-wrap: wrap; gap: 8px; }
-.tablewrap { overflow-x: auto; }
-table { border-collapse: collapse; width: 100%; min-width: 650px; }
-th, td {
-  padding: 11px;
-  border-bottom: 1px solid var(--border);
-  text-align: left;
-  font-size: 14px;
-}
-th { background: var(--light); }
-.small { font-size: 12px; color: #59665c; }
-.hidden { display: none !important; }
-.invoice-head {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  border-bottom: 3px solid var(--green);
-  padding-bottom: 14px;
-}
-.invoice-head h2 { margin: 0 0 5px; }
-.invoice-total { text-align: right; font-size: 20px; font-weight: bold; }
-@media print {
-  body * { visibility: hidden; }
-  #printArea, #printArea * { visibility: visible; }
-  #printArea {
-    display: block !important;
-    position: absolute;
-    left: 0; top: 0; width: 100%;
-    padding: 12mm;
-    background: white;
-  }
-  @page { size: A4; margin: 10mm; }
+:root{--green:#16813a;--dark:#10572b;--light:#eaf6ed;--red:#c62828;--border:#d9e2dc}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f3f6f4;color:#202820}
+header{background:var(--green);color:#fff;padding:18px;display:flex;align-items:center;gap:14px}
+.logo{width:72px;height:72px;flex-shrink:0;border-radius:50%;background:#fff;color:var(--green);border:4px solid #a9e6b6;display:grid;place-items:center;font-size:27px;font-weight:bold}
+header h1{margin:0 0 6px;font-size:23px}header p{margin:0}
+nav{display:flex;flex-wrap:wrap;gap:6px;background:#fff;padding:10px;border-bottom:1px solid var(--border)}
+button,.navbtn{cursor:pointer;border:0;border-radius:6px;padding:10px 13px;font-weight:bold}
+.navbtn{background:var(--light);color:var(--dark)}.navbtn.active,.primary{background:var(--green);color:#fff}
+.danger{background:#ffebee;color:var(--red)}.secondary{background:#e9ecef;color:#222}
+main{padding:16px;max-width:1400px;margin:auto}.panel{background:#fff;padding:18px;border:1px solid var(--border);border-radius:10px;margin-bottom:16px}
+h2{margin-top:0;color:var(--dark)}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
+.metric{padding:17px;background:var(--light);border-radius:8px}.metric strong{display:block;font-size:23px;margin-top:8px}
+.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+label{display:block;font-size:13px;font-weight:bold}input,select,textarea{display:block;width:100%;padding:11px;margin-top:6px;margin-bottom:12px;border:1px solid #cbd5ce;border-radius:6px;background:#fff;font:inherit}
+.actions{display:flex;flex-wrap:wrap;gap:8px}.tablewrap{overflow-x:auto}table{border-collapse:collapse;width:100%;min-width:650px}
+th,td{padding:11px;border-bottom:1px solid var(--border);text-align:left;font-size:14px}th{background:var(--light)}
+.small{font-size:12px;color:#59665c}.hidden{display:none!important}
+.invoice-head{display:flex;align-items:center;gap:14px;border-bottom:3px solid var(--green);padding-bottom:14px}
+.invoice-head h2{margin:0 0 5px}.invoice-total{text-align:right;font-size:18px;font-weight:bold;margin:8px 0}
+.vehicle-details{display:grid;grid-template-columns:155px 1fr;gap:7px 12px;margin:14px 0;font-size:14px}
+.vehicle-details div:nth-child(odd){font-weight:bold}
+@media(max-width:520px){header h1{font-size:18px}.logo{width:58px;height:58px}.vehicle-details{grid-template-columns:120px 1fr}}
+@media print{
+  body *{visibility:hidden}
+  #printArea,#printArea *{visibility:visible}
+  #printArea{display:block!important;position:absolute;left:0;top:0;width:100%;margin:0;padding:10mm;border:0;background:#fff}
+  #printArea .logo{print-color-adjust:exact;-webkit-print-color-adjust:exact}
+  #printArea table{min-width:0;width:100%}
+  #printArea th,#printArea td{font-size:11px;padding:7px}
+  @page{size:A4;margin:10mm}
 }
 </style>
 </head>
 <body>
-
 <section id="loginScreen" class="panel" style="max-width:420px;margin:60px auto">
-  <h2>Evee Center Sanghar</h2>
-  <p>Management System Login</p>
-  <form id="loginForm">
-    <label>Username
-      <input id="username" required value="Evee Center">
-    </label>
-    <label>Password
-      <input id="password" type="password" required>
-    </label>
-    <button class="primary" type="submit">Login</button>
-    <p id="loginError" class="small"></p>
-  </form>
+<h2>Evee Center Sanghar</h2><p>Management System Login</p>
+<form id="loginForm"><label>Username<input id="username" required value="Evee Center"></label>
+<label>Password<input id="password" type="password" required></label>
+<button class="primary" type="submit">Login</button><p id="loginError" class="small"></p></form>
+<p class="small">Default login: Evee Center / evee123</p>
 </section>
-
 <div id="app" class="hidden">
-<header>
-  <div class="logo">E</div>
-  <div>
-    <h1>EVEE CENTER SANGHAR</h1>
-    <p>Nawabshah Road, Sanghar | 0333-2921575</p>
-    <p class="small" style="color:white">Electric Motorcycle Sales & Inventory</p>
-  </div>
-</header>
-
+<header><div class="logo">E</div><div><h1>EVEE CENTER SANGHAR</h1>
+<p>Nawabshah Road, Sanghar | 0333-2921575</p><p class="small" style="color:white">Electric Motorcycle Sales & Inventory</p></div></header>
 <nav id="navigation">
-  <button class="navbtn active" data-page="dashboard">Dashboard</button>
-  <button class="navbtn" data-page="stock">Stock</button>
-  <button class="navbtn" data-page="customers">Customers</button>
-  <button class="navbtn" data-page="sales">Sales</button>
-  <button class="navbtn" data-page="purchases">Purchases</button>
-  <button class="navbtn" data-page="cashbook">Cash Book</button>
-  <button class="navbtn" data-page="expenses">Expenses</button>
-  <button class="navbtn" data-page="invoice">Invoice</button>
-  <button class="navbtn" data-page="backup">Backup</button>
-  <button class="navbtn" id="logoutBtn">Logout</button>
-</nav>
-
+<button class="navbtn active" data-page="dashboard">Dashboard</button><button class="navbtn" data-page="stock">Stock</button>
+<button class="navbtn" data-page="customers">Customers</button><button class="navbtn" data-page="sales">Sales</button>
+<button class="navbtn" data-page="purchases">Purchases</button><button class="navbtn" data-page="cashbook">Cash Book</button>
+<button class="navbtn" data-page="expenses">Expenses</button><button class="navbtn" data-page="invoice">Sale Invoice</button>
+<button class="navbtn" data-page="purchaseInvoice">Purchase Invoice</button><button class="navbtn" data-page="backup">Backup</button>
+<button class="navbtn" id="logoutBtn">Logout</button></nav>
 <main>
-  <section id="dashboard" class="page">
-    <div class="panel">
-      <h2>Business Dashboard</h2>
-      <p>Manage your shop, vehicles, customers and accounts.</p>
-      <div class="cards">
-        <div class="metric">Vehicles in Stock<strong id="stockCount">0</strong></div>
-        <div class="metric">Customers<strong id="customerCount">0</strong></div>
-        <div class="metric">Sales Total<strong id="salesTotal">PKR 0</strong></div>
-        <div class="metric">Purchases Total<strong id="purchaseTotal">PKR 0</strong></div>
-        <div class="metric">Expenses<strong id="expenseTotal">PKR 0</strong></div>
-        <div class="metric">Cash Balance<strong id="cashBalance">PKR 0</strong></div>
-      </div>
-    </div>
-  </section>
+<section id="dashboard" class="page"><div class="panel"><h2>Business Dashboard</h2><div class="cards">
+<div class="metric">Vehicles in Stock<strong id="stockCount">0</strong></div><div class="metric">Customers<strong id="customerCount">0</strong></div>
+<div class="metric">Sales Total<strong id="salesTotal">PKR 0</strong></div><div class="metric">Purchases Total<strong id="purchaseTotal">PKR 0</strong></div>
+<div class="metric">Expenses<strong id="expenseTotal">PKR 0</strong></div><div class="metric">Cash Balance<strong id="cashBalance">PKR 0</strong></div>
+</div><p class="small">Cash balance is calculated from sales received minus purchase payments, expenses and manual cash-out entries, plus manual cash-in entries.</p></div></section>
 
-  <section id="stock" class="page hidden">
-    <div class="panel">
-      <h2>Vehicle Stock</h2>
-      <form id="stockForm">
-        <input type="hidden" id="stockId">
-        <div class="fields">
-          <label>Model
-            <select id="stockModel" required>
-              <option value="">Select Model</option>
-              <option>EVEE SQUBE</option>
-              <option>EVEE SQUBE Graphene</option>
-              <option>EVEE Flipper</option>
-              <option>EVEE Gen-Z</option>
-              <option>Other</option>
-            </select>
-          </label>
-          <label>Color<input id="stockColor" required></label>
-          <label>Chassis Number<input id="stockChassis" required></label>
-          <label>Motor Number<input id="stockMotor" required></label>
-          <label>Purchase Price (PKR)<input id="stockCost" type="number" min="0" required></label>
-          <label>Selling Price (PKR)<input id="stockPrice" type="number" min="0" required></label>
-        </div>
-        <div class="actions">
-          <button class="primary">Save Vehicle</button>
-          <button type="button" class="secondary" onclick="resetForm('stockForm')">Clear</button>
-        </div>
-      </form>
-    </div>
-    <div class="panel">
-      <input id="stockSearch" placeholder="Search model, chassis or motor number">
-      <div class="tablewrap"><table>
-        <thead><tr><th>Model</th><th>Color</th><th>Chassis</th><th>Motor</th><th>Cost</th><th>Price</th><th>Actions</th></tr></thead>
-        <tbody id="stockRows"></tbody>
-      </table></div>
-    </div>
-  </section>
+<section id="stock" class="page hidden"><div class="panel"><h2>Vehicle Stock</h2><form id="stockForm"><input type="hidden" id="stockId">
+<div class="fields">
+<label>Model<select id="stockModel" required><option value="">Select Model</option><option>EVEE SQUBE</option><option>EVEE SQUBE Graphene</option><option>EVEE Flipper</option><option>EVEE Gen-Z</option><option>Other</option></select></label>
+<label>Other / Model Name<input id="stockOtherModel" placeholder="Optional if Other selected"></label><label>Color<input id="stockColor" required></label>
+<label>Chassis Number<input id="stockChassis" required></label><label>Motor Number<input id="stockMotor" required></label>
+<label>Battery Type<input id="stockBatteryType" placeholder="Lithium / Graphene / Lead-acid" required></label>
+<label>Battery Capacity<input id="stockBatteryCapacity" placeholder="e.g. 60V 30Ah" required></label>
+<label>Order Number<input id="stockOrder"></label><label>Purchase Price (PKR)<input id="stockCost" type="number" min="0" step=".01" required></label>
+<label>Sale Price (PKR)<input id="stockPrice" type="number" min="0" step=".01" required></label></div>
+<div class="actions"><button class="primary">Save Vehicle</button><button type="button" class="secondary" onclick="resetForm('stockForm')">Clear</button></div></form></div>
+<div class="panel"><input id="stockSearch" placeholder="Search model, chassis, motor or order number"><div class="tablewrap"><table>
+<thead><tr><th>Model</th><th>Color</th><th>Chassis</th><th>Motor</th><th>Battery</th><th>Order No.</th><th>Cost</th><th>Sale Price</th><th>Status</th><th>Actions</th></tr></thead><tbody id="stockRows"></tbody></table></div></div></section>
 
-  <section id="customers" class="page hidden">
-    <div class="panel">
-      <h2>Customer Management</h2>
-      <form id="customerForm">
-        <input type="hidden" id="customerId">
-        <div class="fields">
-          <label>Customer Name<input id="customerName" required></label>
-          <label>Mobile Number<input id="customerPhone" required></label>
-          <label>Address<input id="customerAddress"></label>
-          <label>National ID (Optional)<input id="customerNid"></label>
-        </div>
-        <div class="actions">
-          <button class="primary">Save Customer</button>
-          <button type="button" class="secondary" onclick="resetForm('customerForm')">Clear</button>
-        </div>
-      </form>
-    </div>
-    <div class="panel">
-      <input id="customerSearch" placeholder="Search customers">
-      <div class="tablewrap"><table>
-        <thead><tr><th>Name</th><th>Phone</th><th>Address</th><th>ID</th><th>Actions</th></tr></thead>
-        <tbody id="customerRows"></tbody>
-      </table></div>
-    </div>
-  </section>
+<section id="customers" class="page hidden"><div class="panel"><h2>Customer Management</h2><form id="customerForm"><input type="hidden" id="customerId"><div class="fields">
+<label>Customer Name<input id="customerName" required></label><label>Mobile Number<input id="customerPhone" required></label>
+<label>Address<input id="customerAddress"></label><label>National ID (Optional)<input id="customerNid"></label></div>
+<div class="actions"><button class="primary">Save Customer</button><button type="button" class="secondary" onclick="resetForm('customerForm')">Clear</button></div></form></div>
+<div class="panel"><input id="customerSearch" placeholder="Search customers"><div class="tablewrap"><table><thead><tr><th>Name</th><th>Phone</th><th>Address</th><th>ID</th><th>Actions</th></tr></thead><tbody id="customerRows"></tbody></table></div></div></section>
 
-  <section id="sales" class="page hidden">
-    <div class="panel">
-      <h2>Sales Records</h2>
-      <form id="salesForm">
-        <input type="hidden" id="saleId">
-        <div class="fields">
-          <label>Date<input id="saleDate" type="date" required></label>
-          <label>Customer
-            <select id="saleCustomer" required></select>
-          </label>
-          <label>Vehicle in Stock
-            <select id="saleVehicle" required></select>
-          </label>
-          <label>Sale Price (PKR)<input id="saleAmount" type="number" min="0" required></label>
-          <label>Payment Received (PKR)<input id="salePaid" type="number" min="0" value="0" required></label>
-          <label>Notes<input id="saleNotes"></label>
-        </div>
-        <div class="actions">
-          <button class="primary">Save Sale</button>
-          <button type="button" class="secondary" onclick="resetForm('salesForm')">Clear</button>
-        </div>
-      </form>
-      <p class="small">Saving a new sale marks its vehicle as sold. Editing a sale restores its previous vehicle first.</p>
-    </div>
-    <div class="panel">
-      <div class="tablewrap"><table>
-        <thead><tr><th>Invoice</th><th>Date</th><th>Customer</th><th>Vehicle</th><th>Amount</th><th>Paid</th><th>Actions</th></tr></thead>
-        <tbody id="salesRows"></tbody>
-      </table></div>
-    </div>
-  </section>
+<section id="sales" class="page hidden"><div class="panel"><h2>Sales Records</h2><form id="salesForm"><input type="hidden" id="saleId"><div class="fields">
+<label>Date<input id="saleDate" type="date" required></label><label>Customer<select id="saleCustomer" required></select></label>
+<label>Vehicle<select id="saleVehicle" required></select></label><label>Sale Price (PKR)<input id="saleAmount" type="number" min="0" step=".01" required></label>
+<label>Discount (PKR)<input id="saleDiscount" type="number" min="0" step=".01" value="0" required></label>
+<label>Final Price (PKR)<input id="saleFinal" type="number" readonly></label><label>Payment Received (PKR)<input id="salePaid" type="number" min="0" step=".01" value="0" required></label>
+<label>Balance (PKR)<input id="saleBalance" readonly></label><label>Notes<input id="saleNotes"></label></div>
+<div class="actions"><button class="primary">Save Sale</button><button type="button" class="secondary" onclick="resetForm('salesForm')">Clear</button></div></form>
+<p class="small">Selecting a vehicle fills its standard sale price. Discount and payment balance are calculated automatically.</p></div>
+<div class="panel"><div class="tablewrap"><table><thead><tr><th>Invoice</th><th>Date</th><th>Customer</th><th>Vehicle</th><th>Sale Price</th><th>Discount</th><th>Final</th><th>Paid</th><th>Balance</th><th>Actions</th></tr></thead><tbody id="salesRows"></tbody></table></div></div></section>
 
-  <section id="purchases" class="page hidden">
-    <div class="panel">
-      <h2>Purchase Records</h2>
-      <form id="purchaseForm">
-        <input type="hidden" id="purchaseId">
-        <div class="fields">
-          <label>Date<input id="purchaseDate" type="date" required></label>
-          <label>Supplier<input id="purchaseSupplier" required></label>
-          <label>Vehicle / Details<input id="purchaseDetails" required></label>
-          <label>Amount (PKR)<input id="purchaseAmount" type="number" min="0" required></label>
-          <label>Payment Made (PKR)<input id="purchasePaid" type="number" min="0" value="0" required></label>
-        </div>
-        <div class="actions">
-          <button class="primary">Save Purchase</button>
-          <button type="button" class="secondary" onclick="resetForm('purchaseForm')">Clear</button>
-        </div>
-      </form>
-    </div>
-    <div class="panel"><div class="tablewrap"><table>
-      <thead><tr><th>Date</th><th>Supplier</th><th>Details</th><th>Amount</th><th>Paid</th><th>Actions</th></tr></thead>
-      <tbody id="purchaseRows"></tbody>
-    </table></div></div>
-  </section>
+<section id="purchases" class="page hidden"><div class="panel"><h2>Purchase Records</h2><form id="purchaseForm"><input type="hidden" id="purchaseId"><div class="fields">
+<label>Date<input id="purchaseDate" type="date" required></label><label>Supplier<input id="purchaseSupplier" required></label>
+<label>Order Number<input id="purchaseOrder" required></label><label>Vehicle / Details<input id="purchaseDetails" required></label>
+<label>Model<select id="purchaseModel"><option value="">Select Model</option><option>EVEE SQUBE</option><option>EVEE SQUBE Graphene</option><option>EVEE Flipper</option><option>EVEE Gen-Z</option><option>Other</option></select></label>
+<label>Battery Type<input id="purchaseBatteryType"></label><label>Battery Capacity<input id="purchaseBatteryCapacity" placeholder="e.g. 60V 30Ah"></label>
+<label>Amount (PKR)<input id="purchaseAmount" type="number" min="0" step=".01" required></label>
+<label>Payment Made (PKR)<input id="purchasePaid" type="number" min="0" step=".01" value="0" required></label>
+<label>Balance (PKR)<input id="purchaseBalance" readonly></label></div>
+<div class="actions"><button class="primary">Save Purchase</button><button type="button" class="secondary" onclick="resetForm('purchaseForm')">Clear</button></div></form></div>
+<div class="panel"><div class="tablewrap"><table><thead><tr><th>Date</th><th>Supplier</th><th>Order No.</th><th>Details</th><th>Amount</th><th>Paid</th><th>Balance</th><th>Actions</th></tr></thead><tbody id="purchaseRows"></tbody></table></div></div></section>
 
-  <section id="cashbook" class="page hidden">
-    <div class="panel">
-      <h2>Cash Book</h2>
-      <form id="cashForm">
-        <input type="hidden" id="cashId">
-        <div class="fields">
-          <label>Date<input id="cashDate" type="date" required></label>
-          <label>Type<select id="cashType"><option value="in">Cash In</option><option value="out">Cash Out</option></select></label>
-          <label>Description<input id="cashDescription" required></label>
-          <label>Amount (PKR)<input id="cashAmount" type="number" min="0.01" step="0.01" required></label>
-        </div>
-        <button class="primary">Save Entry</button>
-        <button type="button" class="secondary" onclick="resetForm('cashForm')">Clear</button>
-      </form>
-    </div>
-    <div class="panel"><div class="tablewrap"><table>
-      <thead><tr><th>Date</th><th>Type</th><th>Description</th><th>Amount</th><th>Actions</th></tr></thead>
-      <tbody id="cashRows"></tbody>
-    </table></div></div>
-  </section>
+<section id="cashbook" class="page hidden"><div class="panel"><h2>Cash Book</h2><p class="small">Sales receipts, purchase payments and expenses are generated automatically. Automatic entries update when source records are edited or deleted. Manual entries can also be added.</p>
+<form id="cashForm"><input type="hidden" id="cashId"><div class="fields"><label>Date<input id="cashDate" type="date" required></label>
+<label>Type<select id="cashType"><option value="in">Cash In</option><option value="out">Cash Out</option></select></label>
+<label>Description<input id="cashDescription" required></label><label>Amount (PKR)<input id="cashAmount" type="number" min="0.01" step=".01" required></label></div>
+<button class="primary">Save Manual Entry</button><button type="button" class="secondary" onclick="resetForm('cashForm')">Clear</button></form></div>
+<div class="panel"><div class="tablewrap"><table><thead><tr><th>Date</th><th>Type</th><th>Description</th><th>Source</th><th>Amount</th><th>Actions</th></tr></thead><tbody id="cashRows"></tbody></table></div></div></section>
 
-  <section id="expenses" class="page hidden">
-    <div class="panel">
-      <h2>Miscellaneous Expenses</h2>
-      <form id="expenseForm">
-        <input type="hidden" id="expenseId">
-        <div class="fields">
-          <label>Date<input id="expenseDate" type="date" required></label>
-          <label>Expense Category<input id="expenseCategory" placeholder="Rent, fuel, bills..." required></label>
-          <label>Description<input id="expenseDescription" required></label>
-          <label>Amount (PKR)<input id="expenseAmount" type="number" min="0.01" step="0.01" required></label>
-        </div>
-        <button class="primary">Save Expense</button>
-        <button type="button" class="secondary" onclick="resetForm('expenseForm')">Clear</button>
-      </form>
-    </div>
-    <div class="panel"><div class="tablewrap"><table>
-      <thead><tr><th>Date</th><th>Category</th><th>Description</th><th>Amount</th><th>Actions</th></tr></thead>
-      <tbody id="expenseRows"></tbody>
-    </table></div></div>
-  </section>
+<section id="expenses" class="page hidden"><div class="panel"><h2>Expenses</h2><form id="expenseForm"><input type="hidden" id="expenseId"><div class="fields">
+<label>Date<input id="expenseDate" type="date" required></label><label>Expense Category<select id="expenseCategory" required></select></label>
+<label>New Category (optional)<input id="newExpenseCategory" placeholder="Add a category"></label><label>Description<input id="expenseDescription" required></label>
+<label>Amount (PKR)<input id="expenseAmount" type="number" min="0.01" step=".01" required></label></div>
+<div class="actions"><button class="primary">Save Expense</button><button type="button" class="secondary" onclick="resetForm('expenseForm')">Clear</button></div></form></div>
+<div class="panel"><div class="tablewrap"><table><thead><tr><th>Date</th><th>Category</th><th>Description</th><th>Amount</th><th>Actions</th></tr></thead><tbody id="expenseRows"></tbody></table></div></div></section>
 
-  <section id="invoice" class="page hidden">
-    <div class="panel">
-      <h2>Print Sales Invoice</h2>
-      <label>Select Sale
-        <select id="invoiceSale"></select>
-      </label>
-      <button class="primary" onclick="printInvoice()">Print A4 Invoice</button>
-    </div>
-    <div id="printArea" class="panel">
-      <div class="invoice-head">
-        <div class="logo">E</div>
-        <div>
-          <h2>EVEE CENTER SANGHAR</h2>
-          <div>Nawabshah Road, Sanghar</div>
-          <div>Phone: 0333-2921575</div>
-        </div>
-      </div>
-      <div id="invoiceContent"><p>Select a sale to preview its invoice.</p></div>
-    </div>
-  </section>
+<section id="invoice" class="page hidden"><div class="panel"><h2>Print Sales Invoice</h2><label>Select Sale<select id="invoiceSale"></select></label><button class="primary" onclick="printInvoice('sale')">Print A4 Invoice</button></div>
+<div id="printArea" class="panel"><div class="invoice-head"><div class="logo">E</div><div><h2>EVEE CENTER SANGHAR</h2><div>Nawabshah Road, Sanghar</div><div>Phone: 0333-2921575</div></div></div><div id="invoiceContent"><p>Select a sale to preview its invoice.</p></div></div></section>
 
-  <section id="backup" class="page hidden">
-    <div class="panel">
-      <h2>Backup and Data Management</h2>
-      <p>Export your records regularly. Data is stored locally in this browser.</p>
-      <div class="actions">
-        <button class="primary" onclick="exportBackup()">Download Backup</button>
-        <label class="secondary" style="padding:10px;cursor:pointer">
-          Restore Backup
-          <input id="restoreFile" type="file" accept=".json,application/json">
-        </label>
-      </div>
-      <p class="small">Restoring replaces the current records. Export a backup first.</p>
-    </div>
-  </section>
-</main>
-</div>
+<section id="purchaseInvoice" class="page hidden"><div class="panel"><h2>Print Purchase Invoice</h2><label>Select Purchase<select id="purchaseInvoiceSelect"></select></label><button class="primary" onclick="printInvoice('purchase')">Print A4 Purchase Invoice</button></div>
+<div id="purchasePrintArea" class="panel"><div class="invoice-head"><div class="logo">E</div><div><h2>EVEE CENTER SANGHAR</h2><div>Nawabshah Road, Sanghar</div><div>Phone: 0333-2921575</div></div></div><div id="purchaseInvoiceContent"><p>Select a purchase to preview its invoice.</p></div></div></section>
 
+<section id="backup" class="page hidden"><div class="panel"><h2>Backup and Data Management</h2><p>Download a backup regularly. Records are stored in this browser on this device.</p>
+<div class="actions"><button class="primary" onclick="exportBackup()">Download Backup</button><label class="secondary" style="padding:10px;cursor:pointer">Restore Backup<input id="restoreFile" type="file" accept=".json,application/json"></label></div>
+<p class="small">Restoring replaces current records. Export a backup first.</p></div></section>
+</main></div>
 <script>
-const $ = id => document.getElementById(id);
-const today = new Date().toISOString().slice(0,10);
-const keys = ['stock','customers','sales','purchases','cashbook','expenses'];
-let db = {};
-keys.forEach(k => {
-  try { db[k] = JSON.parse(localStorage.getItem('evee_'+k) || '[]'); }
-  catch { db[k] = []; }
-});
-
-function save() {
-  keys.forEach(k => localStorage.setItem('evee_'+k, JSON.stringify(db[k])));
-  renderAll();
+const $=id=>document.getElementById(id),today=new Date().toISOString().slice(0,10);
+const keys=['stock','customers','sales','purchases','cashbook','expenses'];
+const defaultCategories=['Rent','Electricity Bill','Fuel','Transport','Repair','Salary','Tea/Refreshment','Other'];
+let db={};
+keys.forEach(k=>{try{db[k]=JSON.parse(localStorage.getItem('evee_'+k)||'[]')}catch{db[k]=[]}});
+let categories=[];try{categories=JSON.parse(localStorage.getItem('evee_expense_categories')||'null')||defaultCategories.slice()}catch{categories=defaultCategories.slice()}
+function id(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
+function esc(v=''){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function money(n){return 'PKR '+Number(n||0).toLocaleString('en-PK',{maximumFractionDigits:2})}
+function get(key,list){return list.find(x=>x.id===key)}
+function modelName(v){return v?.model==='Other'&&v.otherModel?v.otherModel:(v?.model||'Unknown')}
+function vehicleName(v){return v?`${modelName(v)} (${v.color||''})`: 'Unknown'}
+function resetForm(formId){$(formId).reset();const h=$(formId).querySelector('input[type=hidden]');if(h)h.value='';
+if(formId==='stockForm')$('stockId').value='';if(formId==='customerForm')$('customerId').value='';
+if(formId==='salesForm'){$('saleId').value='';$('saleDate').value=today;$('saleDiscount').value=0;$('salePaid').value=0;calcSale()}
+if(formId==='purchaseForm'){$('purchaseId').value='';$('purchaseDate').value=today;$('purchasePaid').value=0;calcPurchase()}
+if(formId==='cashForm'){$('cashId').value='';$('cashDate').value=today}
+if(formId==='expenseForm'){$('expenseId').value='';$('expenseDate').value=today;$('newExpenseCategory').value=''} }
+function showPage(page){document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));$(page).classList.remove('hidden');document.querySelectorAll('.navbtn[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===page))}
+$('navigation').addEventListener('click',e=>{const b=e.target.closest('[data-page]');if(b)showPage(b.dataset.page)});
+$('loginForm').addEventListener('submit',e=>{e.preventDefault();if($('username').value.trim()==='Evee Center'&&$('password').value==='evee123'){$('loginScreen').classList.add('hidden');$('app').classList.remove('hidden');$('loginError').textContent='';renderAll()}else $('loginError').textContent='Incorrect username or password.'});
+$('logoutBtn').onclick=()=>{$('app').classList.add('hidden');$('loginScreen').classList.remove('hidden');$('password').value=''};
+function syncAutoCash(){
+ const manual=db.cashbook.filter(x=>!x.source);
+ const generated=[];
+ db.sales.forEach(s=>{if(Number(s.paid)>0)generated.push({id:'auto-sale-'+s.id,date:s.date,type:'in',description:'Sale receipt '+s.invoice,amount:Number(s.paid),source:'sale',sourceId:s.id})});
+ db.purchases.forEach(p=>{if(Number(p.paid)>0)generated.push({id:'auto-purchase-'+p.id,date:p.date,type:'out',description:'Purchase payment '+p.order,amount:Number(p.paid),source:'purchase',sourceId:p.id})});
+ db.expenses.forEach(x=>{if(Number(x.amount)>0)generated.push({id:'auto-expense-'+x.id,date:x.date,type:'out',description:x.category+' - '+x.description,amount:Number(x.amount),source:'expense',sourceId:x.id})});
+ db.cashbook=[...manual,...generated];
 }
-function id() {
-  return Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+function save(){syncAutoCash();keys.forEach(k=>localStorage.setItem('evee_'+k,JSON.stringify(db[k])));localStorage.setItem('evee_expense_categories',JSON.stringify(categories));renderAll()}
+function rowActions(type,rid){return `<button class="secondary" onclick="editRecord('${type}','${rid}')">Edit</button> <button class="danger" onclick="deleteRecord('${type}','${rid}')">Delete</button>`}
+function addRows(target,html){$(target).innerHTML=html}
+function refreshCategories(selected=''){
+$('expenseCategory').innerHTML='<option value="">Select category</option>'+categories.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('');
+if(selected&&categories.includes(selected))$('expenseCategory').value=selected}
+function renderAll(){
+ const q=($('stockSearch')?.value||'').toLowerCase();
+ addRows('stockRows',db.stock.filter(v=>[modelName(v),v.color,v.chassis,v.motor,v.order,v.batteryType,v.batteryCapacity].join(' ').toLowerCase().includes(q)).map(v=>`<tr>
+ <td>${esc(modelName(v))}</td><td>${esc(v.color)}</td><td>${esc(v.chassis)}</td><td>${esc(v.motor)}</td>
+ <td>${esc(v.batteryType)} / ${esc(v.batteryCapacity)}</td><td>${esc(v.order||'')}</td><td>${money(v.cost)}</td><td>${money(v.price)}</td><td>${v.status==='sold'?'Sold':'Available'}</td><td>${rowActions('stock',v.id)}</td></tr>`).join(''));
+ const cq=($('customerSearch')?.value||'').toLowerCase();
+ addRows('customerRows',db.customers.filter(c=>[c.name,c.phone,c.address,c.nid].join(' ').toLowerCase().includes(cq)).map(c=>`<tr><td>${esc(c.name)}</td><td>${esc(c.phone)}</td><td>${esc(c.address)}</td><td>${esc(c.nid)}</td><td>${rowActions('customers',c.id)}</td></tr>`).join(''));
+ $('saleCustomer').innerHTML='<option value="">Select Customer</option>'+db.customers.map(c=>`<option value="${c.id}">${esc(c.name)} - ${esc(c.phone)}</option>`).join('');
+ $('saleVehicle').innerHTML='<option value="">Select Available Vehicle</option>'+db.stock.filter(v=>v.status!=='sold'||v.id===$('saleVehicle').value).map(v=>`<option value="${v.id}">${esc(vehicleName(v))} | ${esc(v.chassis)}${v.status==='sold'?' (currently sold)':''}</option>`).join('');
+ addRows('salesRows',db.sales.map(s=>{const c=get(s.customer,db.customers),v=get(s.vehicle,db.stock);return `<tr><td>${esc(s.invoice)}</td><td>${esc(s.date)}</td><td>${esc(c?.name||'Deleted Customer')}</td><td>${esc(vehicleName(v))}</td><td>${money(s.amount)}</td><td>${money(s.discount)}</td><td>${money(s.final)}</td><td>${money(s.paid)}</td><td>${money(s.final-s.paid)}</td><td>${rowActions('sales',s.id)}</td></tr>`}).join(''));
+ addRows('purchaseRows',db.purchases.map(p=>`<tr><td>${esc(p.date)}</td><td>${esc(p.supplier)}</td><td>${esc(p.order)}</td><td>${esc(p.details)}</td><td>${money(p.amount)}</td><td>${money(p.paid)}</td><td>${money(p.amount-p.paid)}</td><td>${rowActions('purchases',p.id)}</td></tr>`).join(''));
+ addRows('cashRows',db.cashbook.slice().sort((a,b)=>(b.date||'').localeCompare(a.date||'')).map(c=>`<tr><td>${esc(c.date)}</td><td>${c.type==='in'?'Cash In':'Cash Out'}</td><td>${esc(c.description)}</td><td>${c.source?'Automatic: '+esc(c.source):'Manual'}</td><td>${money(c.amount)}</td><td>${c.source?'<span class="small">Linked record</span>':rowActions('cashbook',c.id)}</td></tr>`).join(''));
+ addRows('expenseRows',db.expenses.map(x=>`<tr><td>${esc(x.date)}</td><td>${esc(x.category)}</td><td>${esc(x.description)}</td><td>${money(x.amount)}</td><td>${rowActions('expenses',x.id)}</td></tr>`).join(''));
+ $('invoiceSale').innerHTML='<option value="">Select Invoice</option>'+db.sales.map(s=>`<option value="${s.id}">${esc(s.invoice)} — ${esc(s.date)}</option>`).join('');
+ $('purchaseInvoiceSelect').innerHTML='<option value="">Select Purchase</option>'+db.purchases.map(p=>`<option value="${p.id}">${esc(p.order)} — ${esc(p.date)} — ${esc(p.supplier)}</option>`).join('');
+ refreshCategories($('expenseCategory').value);
+ $('stockCount').textContent=db.stock.filter(v=>v.status!=='sold').length;$('customerCount').textContent=db.customers.length;
+ $('salesTotal').textContent=money(db.sales.reduce((a,s)=>a+Number(s.final||s.amount||0),0));
+ $('purchaseTotal').textContent=money(db.purchases.reduce((a,p)=>a+Number(p.amount||0),0));
+ $('expenseTotal').textContent=money(db.expenses.reduce((a,x)=>a+Number(x.amount||0),0));
+ const ins=db.cashbook.filter(c=>c.type==='in').reduce((a,c)=>a+Number(c.amount||0),0),outs=db.cashbook.filter(c=>c.type==='out').reduce((a,c)=>a+Number(c.amount||0),0);
+ $('cashBalance').textContent=money(ins-outs);
 }
-function esc(v='') {
-  return String(v).replace(/[&<>"']/g, c => ({
-    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
-  }[c]));
-}
-function money(n) {
-  return 'PKR '+Number(n||0).toLocaleString('en-PK',{maximumFractionDigits:2});
-}
-function resetForm(formId) {
-  $(formId).reset();
-  const h = $(formId).querySelector('input[type="hidden"]');
-  if(h) h.value='';
-  if(formId==='salesForm') $('saleDate').value=today;
-  if(formId==='purchaseForm') $('purchaseDate').value=today;
-  if(formId==='cashForm') $('cashDate').value=today;
-  if(formId==='expenseForm') $('expenseDate').value=today;
-  if(formId==='stockForm') $('stockId').value='';
-  if(formId==='customerForm') $('customerId').value='';
-}
-function showPage(page) {
-  document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));
-  $(page).classList.remove('hidden');
-  document.querySelectorAll('.navbtn[data-page]').forEach(b=>{
-    b.classList.toggle('active',b.dataset.page===page);
-  });
-}
-$('navigation').addEventListener('click',e=>{
-  const b=e.target.closest('[data-page]');
-  if(b) showPage(b.dataset.page);
-});
-
-$('loginForm').addEventListener('submit',e=>{
-  e.preventDefault();
-  if($('username').value.trim()==='Evee Center' &&
-     $('password').value==='evee123') {
-    $('loginScreen').classList.add('hidden');
-    $('app').classList.remove('hidden');
-    $('loginError').textContent='';
-    renderAll();
-  } else $('loginError').textContent='Incorrect username or password.';
-});
-$('logoutBtn').onclick=()=>{
-  $('app').classList.add('hidden');
-  $('loginScreen').classList.remove('hidden');
-  $('password').value='';
-};
-
-function rowActions(type, recordId) {
-  return `<button class="secondary" onclick="editRecord('${type}','${recordId}')">Edit</button>
-  <button class="danger" onclick="deleteRecord('${type}','${recordId}')">Delete</button>`;
-}
-function addRows(target, html) { $(target).innerHTML=html; }
-function get(idName, list) { return list.find(x=>x.id===idName); }
-function vehicleName(v) { return v ? `${v.model} (${v.color})` : 'Unknown'; }
-
-function renderAll() {
-  const q=($('stockSearch')?.value||'').toLowerCase();
-  addRows('stockRows',db.stock.filter(v=>
-    [v.model,v.color,v.chassis,v.motor].join(' ').toLowerCase().includes(q)
-  ).map(v=>`<tr>
-    <td>${esc(v.model)}</td><td>${esc(v.color)}</td>
-    <td>${esc(v.chassis)}</td><td>${esc(v.motor)}</td>
-    <td>${money(v.cost)}</td><td>${money(v.price)}</td>
-    <td>${rowActions('stock',v.id)}</td></tr>`).join(''));
-
-  const cq=($('customerSearch')?.value||'').toLowerCase();
-  addRows('customerRows',db.customers.filter(c=>
-    [c.name,c.phone,c.address,c.nid].join(' ').toLowerCase().includes(cq)
-  ).map(c=>`<tr><td>${esc(c.name)}</td><td>${esc(c.phone)}</td>
-    <td>${esc(c.address)}</td><td>${esc(c.nid)}</td>
-    <td>${rowActions('customers',c.id)}</td></tr>`).join(''));
-
-  $('saleCustomer').innerHTML='<option value="">Select Customer</option>'+
-    db.customers.map(c=>`<option value="${c.id}">${esc(c.name)} - ${esc(c.phone)}</option>`).join('');
-  $('saleVehicle').innerHTML='<option value="">Select Available Vehicle</option>'+
-    db.stock.filter(v=>v.status!=='sold').map(v=>
-      `<option value="${v.id}">${esc(vehicleName(v))} | ${esc(v.chassis)}</option>`).join('');
-
-  addRows('salesRows',db.sales.map(s=>{
-    const c=get(s.customer,db.customers),v=get(s.vehicle,db.stock);
-    return `<tr><td>${esc(s.invoice)}</td><td>${esc(s.date)}</td>
-    <td>${esc(c?.name||'Deleted Customer')}</td><td>${esc(vehicleName(v))}</td>
-    <td>${money(s.amount)}</td><td>${money(s.paid)}</td>
-    <td>${rowActions('sales',s.id)}</td></tr>`;
-  }).join(''));
-
-  addRows('purchaseRows',db.purchases.map(p=>`<tr>
-    <td>${esc(p.date)}</td><td>${esc(p.supplier)}</td><td>${esc(p.details)}</td>
-    <td>${money(p.amount)}</td><td>${money(p.paid)}</td>
-    <td>${rowActions('purchases',p.id)}</td></tr>`).join(''));
-
-  addRows('cashRows',db.cashbook.map(c=>`<tr>
-    <td>${esc(c.date)}</td><td>${c.type==='in'?'Cash In':'Cash Out'}</td>
-    <td>${esc(c.description)}</td><td>${money(c.amount)}</td>
-    <td>${rowActions('cashbook',c.id)}</td></tr>`).join(''));
-
-  addRows('expenseRows',db.expenses.map(x=>`<tr>
-    <td>${esc(x.date)}</td><td>${esc(x.category)}</td><td>${esc(x.description)}</td>
-    <td>${money(x.amount)}</td><td>${rowActions('expenses',x.id)}</td></tr>`).join(''));
-
-  $('invoiceSale').innerHTML='<option value="">Select Invoice</option>'+
-    db.sales.map(s=>`<option value="${s.id}">${esc(s.invoice)} — ${esc(s.date)}</option>`).join('');
-
-  $('stockCount').textContent=db.stock.filter(v=>v.status!=='sold').length;
-  $('customerCount').textContent=db.customers.length;
-  $('salesTotal').textContent=money(db.sales.reduce((a,s)=>a+Number(s.amount),0));
-  $('purchaseTotal').textContent=money(db.purchases.reduce((a,p)=>a+Number(p.amount),0));
-  $('expenseTotal').textContent=money(db.expenses.reduce((a,x)=>a+Number(x.amount),0));
-  const ins=db.cashbook.filter(c=>c.type==='in').reduce((a,c)=>a+Number(c.amount),0);
-  const outs=db.cashbook.filter(c=>c.type==='out').reduce((a,c)=>a+Number(c.amount),0);
-  $('cashBalance').textContent=money(ins-outs);
-}
-
-$('stockForm').addEventListener('submit',e=>{
-  e.preventDefault();
-  const old=get($('stockId').value,db.stock);
-  const obj={id:old?.id||id(),model:$('stockModel').value,
-    color:$('stockColor').value.trim(),chassis:$('stockChassis').value.trim(),
-    motor:$('stockMotor').value.trim(),cost:+$('stockCost').value,
-    price:+$('stockPrice').value,status:old?.status||'available'};
-  const dup=db.stock.find(v=>v.chassis===obj.chassis&&v.id!==obj.id);
-  if(dup) return alert('This chassis number already exists.');
-  db.stock=old?db.stock.map(v=>v.id===old.id?obj:v):[obj,...db.stock];
-  resetForm('stockForm');save();
-});
-$('customerForm').addEventListener('submit',e=>{
-  e.preventDefault();
-  const old=get($('customerId').value,db.customers);
-  const obj={id:old?.id||id(),name:$('customerName').value.trim(),
-    phone:$('customerPhone').value.trim(),address:$('customerAddress').value.trim(),
-    nid:$('customerNid').value.trim()};
-  db.customers=old?db.customers.map(v=>v.id===old.id?obj:v):[obj,...db.customers];
-  resetForm('customerForm');save();
-});
-$('salesForm').addEventListener('submit',e=>{
-  e.preventDefault();
-  const old=get($('saleId').value,db.sales);
-  const vehicle=$('saleVehicle').value, customer=$('saleCustomer').value;
-  if(!customer||!vehicle) return alert('Select a customer and an available vehicle.');
-  const v=get(vehicle,db.stock);
-  if(!v || (v.status==='sold' && old?.vehicle!==vehicle))
-    return alert('Vehicle is not available.');
-  const amount=+$('saleAmount').value, paid=+$('salePaid').value;
-  if(paid>amount) return alert('Payment received cannot exceed sale price.');
-  if(old) {
-    const previous=get(old.vehicle,db.stock);
-    if(previous) previous.status='available';
-  }
-  const obj={id:old?.id||id(),invoice:old?.invoice||('ECS-'+Date.now()),
-    date:$('saleDate').value,customer,vehicle,amount,paid,
-    notes:$('saleNotes').value.trim()};
-  db.sales=old?db.sales.map(s=>s.id===old.id?obj:s):[obj,...db.sales];
-  v.status='sold';
-  resetForm('salesForm');save();
-});
-$('purchaseForm').addEventListener('submit',e=>{
-  e.preventDefault();
-  const old=get($('purchaseId').value,db.purchases);
-  const obj={id:old?.id||id(),date:$('purchaseDate').value,
-    supplier:$('purchaseSupplier').value.trim(),details:$('purchaseDetails').value.trim(),
-    amount:+$('purchaseAmount').value,paid:+$('purchasePaid').value};
-  if(obj.paid>obj.amount) return alert('Payment cannot exceed purchase amount.');
-  db.purchases=old?db.purchases.map(p=>p.id===old.id?obj:p):[obj,...db.purchases];
-  resetForm('purchaseForm');save();
-});
-$('cashForm').addEventListener('submit',e=>{
-  e.preventDefault();
-  const old=get($('cashId').value,db.cashbook);
-  const obj={id:old?.id||id(),date:$('cashDate').value,type:$('cashType').value,
-    description:$('cashDescription').value.trim(),amount:+$('cashAmount').value};
-  db.cashbook=old?db.cashbook.map(c=>c.id===old.id?obj:c):[obj,...db.cashbook];
-  resetForm('cashForm');save();
-});
-$('expenseForm').addEventListener('submit',e=>{
-  e.preventDefault();
-  const old=get($('expenseId').value,db.expenses);
-  const obj={id:old?.id||id(),date:$('expenseDate').value,
-    category:$('expenseCategory').value.trim(),
-    description:$('expenseDescription').value.trim(),amount:+$('expenseAmount').value};
-  db.expenses=old?db.expenses.map(x=>x.id===old.id?obj:x):[obj,...db.expenses];
-  resetForm('expenseForm');save();
-});
-
-function editRecord(type, recordId) {
-  const r=get(recordId,db[type]); if(!r) return;
-  const map={
-    stock:{stockId:'id',stockModel:'model',stockColor:'color',stockChassis:'chassis',stockMotor:'motor',stockCost:'cost',stockPrice:'price'},
-    customers:{customerId:'id',customerName:'name',customerPhone:'phone',customerAddress:'address',customerNid:'nid'},
-    sales:{saleId:'id',saleDate:'date',saleCustomer:'customer',saleVehicle:'vehicle',saleAmount:'amount',salePaid:'paid',saleNotes:'notes'},
-    purchases:{purchaseId:'id',purchaseDate:'date',purchaseSupplier:'supplier',purchaseDetails:'details',purchaseAmount:'amount',purchasePaid:'paid'},
-    cashbook:{cashId:'id',cashDate:'date',cashType:'type',cashDescription:'description',cashAmount:'amount'},
-    expenses:{expenseId:'id',expenseDate:'date',expenseCategory:'category',expenseDescription:'description',expenseAmount:'amount'}
-  };
-  if(type==='sales' && r.vehicle) {
-    const v=get(r.vehicle,db.stock);
-    if(v) v.status='available';
-  }
-  Object.entries(map[type]).forEach(([field,key])=>$(field).value=r[key]??'');
-  if(type==='sales') renderAll();
-  showPage(type);
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-function deleteRecord(type, recordId) {
-  const r=get(recordId,db[type]); if(!r) return;
-  if(!confirm('Delete this record? This action cannot be undone.')) return;
-  if(type==='sales') {
-    const v=get(r.vehicle,db.stock); if(v) v.status='available';
-  }
-  if(type==='stock' && db.sales.some(s=>s.vehicle===recordId))
-    return alert('This vehicle has a sales record. Delete the sale first.');
-  if(type==='customers' && db.sales.some(s=>s.customer===recordId))
-    return alert('This customer has a sales record. Keep the customer for accounting history.');
-  db[type]=db[type].filter(x=>x.id!==recordId);
-  save();
-}
-$('stockSearch').addEventListener('input',renderAll);
-$('customerSearch').addEventListener('input',renderAll);
-
-$('invoiceSale').addEventListener('change',()=>{
-  const s=get($('invoiceSale').value,db.sales);
-  if(!s) { $('invoiceContent').innerHTML='<p>Select a sale to preview its invoice.</p>';return; }
-  const c=get(s.customer,db.customers),v=get(s.vehicle,db.stock);
-  $('invoiceContent').innerHTML=`
-    <p><b>Invoice No:</b> ${esc(s.invoice)} &nbsp; <b>Date:</b> ${esc(s.date)}</p>
-    <h3>Customer Details</h3>
-    <p><b>Name:</b> ${esc(c?.name||'Customer')}<br>
-    <b>Phone:</b> ${esc(c?.phone||'')}<br>
-    <b>Address:</b> ${esc(c?.address||'')}</p>
-    <h3>Vehicle Details</h3>
-    <div class="tablewrap"><table>
-      <tr><th>Model</th><th>Color</th><th>Chassis No.</th><th>Motor No.</th><th>Price</th></tr>
-      <tr><td>${esc(v?.model||'')}</td><td>${esc(v?.color||'')}</td>
-      <td>${esc(v?.chassis||'')}</td><td>${esc(v?.motor||'')}</td>
-      <td>${money(s.amount)}</td></tr>
-    </table></div>
-    <p class="invoice-total">Total: ${money(s.amount)}</p>
-    <p class="invoice-total">Paid: ${money(s.paid)}</p>
-    <p class="invoice-total">Balance: ${money(s.amount-s.paid)}</p>
-    <p>Customer Signature: __________________</p>
-    <p>Authorized Signature: ________________</p>
-    <p class="small">Thank you for choosing Evee Center Sanghar.</p>`;
-});
-function printInvoice() {
-  if(!$('invoiceSale').value) return alert('Select an invoice first.');
-  window.print();
-}
-
-function exportBackup() {
-  const blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'});
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(blob);
-  a.download='Evee_Center_Backup_'+today+'.json';
-  a.click(); URL.revokeObjectURL(a.href);
-}
-$('restoreFile').addEventListener('change',async e=>{
-  const file=e.target.files[0]; if(!file) return;
-  try {
-    const incoming=JSON.parse(await file.text());
-    if(!keys.every(k=>Array.isArray(incoming[k])))
-      throw new Error('Invalid backup file');
-    if(!confirm('Replace all current records with this backup?')) return;
-    keys.forEach(k=>db[k]=incoming[k]);
-    save(); alert('Backup restored.');
-  } catch(err) { alert('Could not restore this backup file.'); }
-  e.target.value='';
-});
-
-['saleDate','purchaseDate','cashDate','expenseDate'].forEach(id=>$(id).value=today);
-renderAll();
+$('stockForm').addEventListener('submit',e=>{e.preventDefault();const old=get($('stockId').value,db.stock);
+const obj={id:old?.id||id(),model:$('stockModel').value,otherModel:$('stockOtherModel').value.trim(),color:$('stockColor').value.trim(),chassis:$('stockChassis').value.trim(),motor:$('stockMotor').value.trim(),batteryType:$('stockBatteryType').value.trim(),batteryCapacity:$('stockBatteryCapacity').value.trim(),order:$('stockOrder').value.trim(),cost:+$('stockCost').value,price:+$('stockPrice').value,status:old?.status||'available'};
+if(db.stock.some(v=>v.chassis===obj.chassis&&v.id!==obj.id))return alert('This chassis number already exists.');
+db.stock=old?db.stock.map(v=>v.id===old.id?obj:v):[obj,...db.stock];resetForm('stockForm');save()});
+$('customerForm').addEventListener('submit',e=>{e.preventDefault();const old=get($('customerId').value,db.customers),obj={id:old?.id||id(),name:$('customerName').value.trim(),phone:$('customerPhone').value.trim(),address:$('customerAddress').value.trim(),nid:$('customerNid').value.trim()};db.customers=old?db.customers.map(v=>v.id===old.id?obj:v):[obj,...db.customers];resetForm('customerForm');save()});
+function calcSale(){const amount=Number($('saleAmount').value||0),discount=Number($('saleDiscount').value||0),final=Math.max(0,amount-discount),paid=Number($('salePaid').value||0);$('saleFinal').value=final.toFixed(2);$('saleBalance').value=Math.max(0,final-paid).toFixed(2)}
+$('saleVehicle').addEventListener('change',()=>{const v=get($('saleVehicle').value,db.stock);if(v){$('saleAmount').value=v.price;$('saleDiscount').value=0;calcSale()}});
+['saleAmount','saleDiscount','salePaid'].forEach(k=>$(k).addEventListener('input',calcSale));
+$('salesForm').addEventListener('submit',e=>{e.preventDefault();const old=get($('saleId').value,db.sales),vehicle=$('saleVehicle').value,customer=$('saleCustomer').value,v=get(vehicle,db.stock);
+if(!customer||!vehicle)return alert('Select a customer and a vehicle.');
+if(!v||(v.status==='sold'&&old?.vehicle!==vehicle))return alert('Vehicle is not available.');
+const amount=+$('saleAmount').value,discount=+$('saleDiscount').value,final=amount-discount,paid=+$('salePaid').value;
+if(discount>amount)return alert('Discount cannot exceed sale price.');if(paid>final)return alert('Payment received cannot exceed final sale price.');
+if(old){const prev=get(old.vehicle,db.stock);if(prev)prev.status='available'}
+const obj={id:old?.id||id(),invoice:old?.invoice||('ECS-'+Date.now()),date:$('saleDate').value,customer,vehicle,amount,discount,final,paid,notes:$('saleNotes').value.trim()};
+db.sales=old?db.sales.map(s=>s.id===old.id?obj:s):[obj,...db.sales];v.status='sold';resetForm('salesForm');save()});
+function calcPurchase(){const amount=Number($('purchaseAmount').value||0),paid=Number($('purchasePaid').value||0);$('purchaseBalance').value=Math.max(0,amount-paid).toFixed(2)}
+['purchaseAmount','purchasePaid'].forEach(k=>$(k).addEventListener('input',calcPurchase));
+$('purchaseForm').addEventListener('submit',e=>{e.preventDefault();const old=get($('purchaseId').value,db.purchases),obj={id:old?.id||id(),date:$('purchaseDate').value,supplier:$('purchaseSupplier').value.trim(),order:$('purchaseOrder').value.trim(),details:$('purchaseDetails').value.trim(),model:$('purchaseModel').value,batteryType:$('purchaseBatteryType').value.trim(),batteryCapacity:$('purchaseBatteryCapacity').value.trim(),amount:+$('purchaseAmount').value,paid:+$('purchasePaid').value};
+if(obj.paid>obj.amount)return alert('Payment cannot exceed purchase amount.');db.purchases=old?db.purchases.map(p=>p.id===old.id?obj:p):[obj,...db.purchases];resetForm('purchaseForm');save()});
+$('cashForm').addEventListener('submit',e=>{e.preventDefault();const old=get($('cashId').value,db.cashbook);if(old?.source)return alert('Automatic cash entries cannot be edited here. Edit the linked source record instead.');
+const obj={id:old?.id||id(),date:$('cashDate').value,type:$('cashType').value,description:$('cashDescription').value.trim(),amount:+$('cashAmount').value};const manual=db.cashbook.filter(x=>!x.source);db.cashbook=old?manual.map(c=>c.id===old.id?obj:c):[...manual,obj];resetForm('cashForm');save()});
+$('expenseForm').addEventListener('submit',e=>{e.preventDefault();const old=get($('expenseId').value,db.expenses);let cat=$('newExpenseCategory').value.trim()||$('expenseCategory').value;if(!cat)return alert('Select or enter an expense category.');if(!categories.includes(cat))categories.push(cat);
+const obj={id:old?.id||id(),date:$('expenseDate').value,category:cat,description:$('expenseDescription').value.trim(),amount:+$('expenseAmount').value};db.expenses=old?db.expenses.map(x=>x.id===old.id?obj:x):[obj,...db.expenses];resetForm('expenseForm');save()});
+function editRecord(type,rid){const r=get(rid,db[type]);if(!r)return;
+const maps={stock:{stockId:'id',stockModel:'model',stockOtherModel:'otherModel',stockColor:'color',stockChassis:'chassis',stockMotor:'motor',stockBatteryType:'batteryType',stockBatteryCapacity:'batteryCapacity',stockOrder:'order',stockCost:'cost',stockPrice:'price'},customers:{customerId:'id',customerName:'name',customerPhone:'phone',customerAddress:'address',customerNid:'nid'},sales:{saleId:'id',saleDate:'date',saleCustomer:'customer',saleVehicle:'vehicle',saleAmount:'amount',saleDiscount:'discount',salePaid:'paid',saleNotes:'notes'},purchases:{purchaseId:'id',purchaseDate:'date',purchaseSupplier:'supplier',purchaseOrder:'order',purchaseDetails:'details',purchaseModel:'model',purchaseBatteryType:'batteryType',purchaseBatteryCapacity:'batteryCapacity',purchaseAmount:'amount',purchasePaid:'paid'},cashbook:{cashId:'id',cashDate:'date',cashType:'type',cashDescription:'description',cashAmount:'amount'},expenses:{expenseId:'id',expenseDate:'date',expenseCategory:'category',expenseDescription:'description',expenseAmount:'amount'}};
+if(type==='sales'&&r.vehicle){const v=get(r.vehicle,db.stock);if(v)v.status='available'}
+Object.entries(maps[type]).forEach(([field,key])=>$(field).value=r[key]??'');
+if(type==='sales'){renderAll();$('saleVehicle').value=r.vehicle;calcSale()}if(type==='purchases')calcPurchase();if(type==='expenses')refreshCategories(r.category);
+showPage(type);window.scrollTo({top:0,behavior:'smooth'})}
+function deleteRecord(type,rid){const r=get(rid,db[type]);if(!r)return;if(type==='cashbook'&&r.source)return alert('This automatic entry is linked to another record. Delete or edit that source record instead.');
+if(!confirm('Delete this record? This action cannot be undone.'))return;
+if(type==='sales'){const v=get(r.vehicle,db.stock);if(v)v.status='available'}
+if(type==='stock'&&db.sales.some(s=>s.vehicle===rid))return alert('This vehicle has a sales record. Delete the sale first.');
+if(type==='customers'&&db.sales.some(s=>s.customer===rid))return alert('This customer has a sales record. Keep the customer for accounting history.');
+db[type]=db[type].filter(x=>x.id!==rid);save()}
+$('stockSearch').addEventListener('input',renderAll);$('customerSearch').addEventListener('input',renderAll);
+$('invoiceSale').addEventListener('change',renderSaleInvoice);
+function renderSaleInvoice(){const s=get($('invoiceSale').value,db.sales);if(!s){$('invoiceContent').innerHTML='<p>Select a sale to preview its invoice.</p>';return}
+const c=get(s.customer,db.customers),v=get(s.vehicle,db.stock);
+$('invoiceContent').innerHTML=`<p><b>Invoice No:</b> ${esc(s.invoice)} &nbsp; <b>Date:</b> ${esc(s.date)}</p><h3>Customer Details</h3>
+<div class="vehicle-details"><div>Name:</div><div>${esc(c?.name||'Customer')}</div><div>Phone:</div><div>${esc(c?.phone||'')}</div><div>Address:</div><div>${esc(c?.address||'')}</div></div>
+<h3>Vehicle Details</h3><div class="vehicle-details"><div>Model:</div><div>${esc(modelName(v))}</div><div>Color:</div><div>${esc(v?.color||'')}</div><div>Chassis Number:</div><div>${esc(v?.chassis||'')}</div><div>Motor Number:</div><div>${esc(v?.motor||'')}</div><div>Battery Type:</div><div>${esc(v?.batteryType||'')}</div><div>Battery Capacity:</div><div>${esc(v?.batteryCapacity||'')}</div><div>Order Number:</div><div>${esc(v?.order||'')}</div></div>
+<hr><p class="invoice-total">Sale Price: ${money(s.amount)}</p><p class="invoice-total">Discount: ${money(s.discount)}</p><p class="invoice-total">Final Price: ${money(s.final)}</p><p class="invoice-total">Paid: ${money(s.paid)}</p><p class="invoice-total">Balance: ${money(s.final-s.paid)}</p>
+<p>Authorized Signature: __________________</p><p class="small">Thank you for choosing Evee Center Sanghar.</p>`}
+$('purchaseInvoiceSelect').addEventListener('change',renderPurchaseInvoice);
+function renderPurchaseInvoice(){const p=get($('purchaseInvoiceSelect').value,db.purchases);if(!p){$('purchaseInvoiceContent').innerHTML='<p>Select a purchase to preview its invoice.</p>';return}
+$('purchaseInvoiceContent').innerHTML=`<p><b>Purchase Invoice:</b> ${esc(p.order)} &nbsp; <b>Date:</b> ${esc(p.date)}</p><h3>Supplier Details</h3><div class="vehicle-details"><div>Supplier:</div><div>${esc(p.supplier)}</div><div>Order Number:</div><div>${esc(p.order)}</div></div><h3>Vehicle / Purchase Details</h3><div class="vehicle-details"><div>Details:</div><div>${esc(p.details)}</div><div>Model:</div><div>${esc(p.model||'')}</div><div>Battery Type:</div><div>${esc(p.batteryType||'')}</div><div>Battery Capacity:</div><div>${esc(p.batteryCapacity||'')}</div></div><hr><p class="invoice-total">Purchase Price: ${money(p.amount)}</p><p class="invoice-total">Paid: ${money(p.paid)}</p><p class="invoice-total">Balance: ${money(p.amount-p.paid)}</p><p>Authorized Signature: __________________</p>`}
+function printInvoice(type){if(type==='sale'){if(!$('invoiceSale').value)return alert('Select a sale first.');renderSaleInvoice();window.print()}else{if(!$('purchaseInvoiceSelect').value)return alert('Select a purchase first.');renderPurchaseInvoice();document.body.classList.add('printing-purchase');const style=document.createElement('style');style.id='purchasePrintStyle';style.textContent='@media print{body.printing-purchase *{visibility:hidden}body.printing-purchase #purchasePrintArea,body.printing-purchase #purchasePrintArea *{visibility:visible}body.printing-purchase #purchasePrintArea{display:block!important;position:absolute;left:0;top:0;width:100%;margin:0;padding:10mm;border:0;background:white}}';document.head.appendChild(style);window.print();document.body.classList.remove('printing-purchase');style.remove()}}
+function exportBackup(){const blob=new Blob([JSON.stringify({ ...db,expenseCategories:categories},null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='Evee_Center_Backup_'+today+'.json';a.click();URL.revokeObjectURL(a.href)}
+$('restoreFile').addEventListener('change',async e=>{const file=e.target.files[0];if(!file)return;try{const incoming=JSON.parse(await file.text());if(!keys.every(k=>Array.isArray(incoming[k])))throw Error('Invalid backup');if(!confirm('Replace all current records with this backup?'))return;keys.forEach(k=>db[k]=incoming[k]);if(Array.isArray(incoming.expenseCategories))categories=incoming.expenseCategories;save();alert('Backup restored.')}catch(err){alert('Could not restore this backup file.')}e.target.value=''});
+['saleDate','purchaseDate','cashDate','expenseDate'].forEach(k=>$(k).value=today);
+['saleAmount','saleDiscount','salePaid'].forEach(k=>$(k).addEventListener('change',calcSale));
+syncAutoCash();renderAll();calcSale();calcPurchase();
 </script>
-</body>
-</html>
+</body></html>'''
+
+path = Path("/mnt/data/Evee_Center_Sanghar_Updated.html")
+path.write_text(html, encoding="utf-8")
+print(f"Created {path} ({path.stat().st_size:,} bytes)")
