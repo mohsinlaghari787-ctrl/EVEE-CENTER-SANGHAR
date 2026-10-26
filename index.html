@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ur" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Evee Center Sanghar - Secure Portal</title>
+    <title>Evee Center Sanghar - Secure Business Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @media print {
@@ -13,524 +13,345 @@
         }
     </style>
 </head>
-<body class="bg-gray-900 text-gray-100 font-sans p-4">
+<body class="bg-gray-900 text-gray-100 font-sans min-h-screen">
 
     <!-- LOGIN SCREEN -->
-    <div id="loginScreen" class="max-w-md mx-auto mt-20 bg-gray-800 p-8 rounded-xl border border-gray-700 shadow-2xl text-center">
-        <h2 class="text-2xl font-bold text-emerald-400 mb-2">Evee Center Sanghar</h2>
-        <p class="text-sm text-gray-400 mb-6">پۆرٹल میں لاگ ان کرنے کے لیے پاسవర్د درج کریں</p>
-        <input type="password" id="loginPassword" placeholder="पासवर्ड दर्ज करें (Password)" class="w-full bg-gray-900 border border-gray-700 p-3 rounded-lg text-white mb-4 text-center">
-        <button onclick="checkLogin()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold p-3 rounded-lg transition">لاگ ان کریں</button>
-        <p id="loginError" class="text-red-500 text-sm mt-3 hidden">गलत पासवर्ड! कृपया सही पासवर्ड डालें।</p>
-    </div>
-
-    <!-- MAIN APP (Hidden until login) -->
-    <div id="mainApp" class="max-w-5xl mx-auto hidden">
-        <!-- Header -->
-        <header class="bg-gray-800 p-6 rounded-xl shadow-md mb-6 text-center border border-gray-700 relative">
-            <button onclick="logout()" class="absolute left-4 top-4 bg-red-600 hover:bg-red-500 text-white px-3 py-1 rounded text-sm">لاگ آउट</button>
-            <h1 class="text-3xl font-bold text-emerald-400">Evee Center Sanghar</h1>
-            <p class="text-base text-gray-300 mt-1">نवाबशाह रोड, संगर</p>
-            <p class="text-sm text-gray-400 mt-1">प्रोप्राइटर: गुलाम शब्बीर | मोबाइल: 03332921575</p>
-        </header>
-
-        <!-- Navigation Tabs -->
-        <div class="flex flex-wrap gap-2 mb-6 justify-center">
-            <button onclick="switchTab('stock')" id="btn-stock" class="bg-emerald-600 px-4 py-2 rounded-lg font-bold text-white transition">स्टॉक (Stock)</button>
-            <button onclick="switchTab('sales')" id="btn-sales" class="bg-gray-800 border border-gray-700 px-4 py-2 rounded-lg text-gray-300 transition">बिक्री & इनवॉइस (Sales)</button>
-            <button onclick="switchTab('purchase')" id="btn-purchase" class="bg-gray-800 border border-gray-700 px-4 py-2 rounded-lg text-gray-300 transition">खरीद (Purchase)</button>
-            <button onclick="switchTab('cashbook')" id="btn-cashbook" class="bg-gray-800 border border-gray-700 px-4 py-2 rounded-lg text-gray-300 transition">कैश बुक (Cash Book)</button>
-            <button onclick="switchTab('expense')" id="btn-expense" class="bg-gray-800 border border-gray-700 px-4 py-2 rounded-lg text-gray-300 transition">खर्चे (Expenses)</button>
-        </div>
-
-        <!-- TAB 1: STOCK -->
-        <div id="tab-stock" class="space-y-6">
-            <div class="bg-gray-800 p-6 rounded-xl border border-gray-700">
-                <h2 id="stockFormTitle" class="text-lg font-semibold mb-4 text-emerald-300">नई बाइक स्टॉक एंट्री</h2>
-                <input type="hidden" id="editStockIndex" value="-1">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <input type="text" id="sModel" placeholder="मॉडल (जैसे: EVEE S-Qube)" class="bg-gray-900 border border-gray-700 p-3 rounded-lg text-white">
-                    <input type="text" id="sChassis" placeholder="चेसिस नंबर (Chassis No.)" class="bg-gray-900 border border-gray-700 p-3 rounded-lg text-white">
-                    <input type="text" id="sMotor" placeholder="मोटर नंबर (Motor No.)" class="bg-gray-900 border border-gray-700 p-3 rounded-lg text-white">
-                    <input type="number" id="sPrice" placeholder="खरीद / लागत मूल्य (Price)" class="bg-gray-900 border border-gray-700 p-3 rounded-lg text-white">
-                </div>
-                <div class="flex gap-2 mt-4">
-                    <button onclick="saveStock()" id="stockSaveBtn" class="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold p-3 rounded-lg">स्टॉक सेव करें</button>
-                    <button onclick="resetStockForm()" id="stockCancelBtn" class="hidden bg-gray-700 hover:bg-gray-600 text-white p-3 rounded-lg">रद्द करें</button>
-                </div>
-            </div>
-
-            <div class="bg-gray-800 p-6 rounded-xl border border-gray-700">
-                <h2 class="text-lg font-semibold mb-4 text-emerald-300">मौजूदा स्टॉक लिस्ट</h2>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-right border-collapse">
-                        <thead>
-                            <tr class="border-b border-gray-700 text-gray-400">
-                                <th class="p-3">मॉडल</th>
-                                <th class="p-3">चेसिस / मोटर</th>
-                                <th class="p-3">कीमत</th>
-                                <th class="p-3 text-center">एक्शन</th>
-                            </tr>
-                        </thead>
-                        <tbody id="stockTableBody">
-                            <tr><td colspan="4" class="text-center p-4 text-gray-500">कोई डेटा नहीं है।</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- TAB 2: SALES & INVOICE -->
-        <div id="tab-sales" class="space-y-6 hidden">
-            <div class="bg-gray-800 p-6 rounded-xl border border-gray-700">
-                <h2 class="text-lg font-semibold mb-4 text-emerald-300">नया सेल इनवॉइस बनाएं</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <input type="text" id="saleCustomer" placeholder="ग्राहक का नाम" class="bg-gray-900 border border-gray-700 p-3 rounded-lg text-white">
-                    <input type="text" id="salePhone" placeholder="ग्राहक का मोबाइल नंबर" class="bg-gray-900 border border-gray-700 p-3 rounded-lg text-white">
-                    <input type="text" id="saleModel" placeholder="वाहन विवरण / मॉडल" class="bg-gray-900 border border-gray-700 p-3 rounded-lg text-white">
-                    <input type="number" id="saleAmount" placeholder="बिक्री मूल्य (Amount)" class="bg-gray-900 border border-gray-700 p-3 rounded-lg text-white">
-                </div>
-                <button onclick="saveSale()" class="mt-4 w-full bg-blue-600 hover:bg-blue-500 text-white font-bold p-3 rounded-lg">इनवॉइस बनाएँ और सेव करें</button>
-            </div>
-
-            <div class="bg-gray-800 p-6 rounded-xl border border-gray-700">
-                <h2 class="text-lg font-semibold mb-4 text-emerald-300">बिक्री रिकॉर्ड (Sales History)</h2>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-right border-collapse">
-                        <thead>
-                            <tr class="border-b border-gray-700 text-gray-400">
-                                <th class="p-3">ग्राहक</th>
-                                <th class="p-3">मॉडल</th>
-                                <th class="p-3">अमाउंट</th>
-                                <th class="p-3 text-center">इनवॉइस / डिलीट</th>
-                            </tr>
-                        </thead>
-                        <tbody id="salesTableBody">
-                            <tr><td colspan="4" class="text-center p-4 text-gray-500">कोई बिक्री रिकॉर्ड नहीं है।</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- TAB 3: PURCHASE -->
-        <div id="tab-purchase" class="space-y-6 hidden">
-            <div class="bg-gray-800 p-6 rounded-xl border border-gray-700">
-                <h2 class="text-lg font-semibold mb-4 text-emerald-300">नई खरीद (Purchase) दर्ज करें</h2>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <input type="text" id="pSupplier" placeholder="सप्लायर का नाम" class="bg-gray-900 border border-gray-700 p-3 rounded-lg text-white">
-                    <input type="text" id="pItem" placeholder="आइटम / बाइक विवरण" class="bg-gray-900 border border-gray-700 p-3 rounded-lg text-white">
-                    <input type="number" id="pCost" placeholder="कुल लागत (Cost)" class="bg-gray-900 border border-gray-700 p-3 rounded-lg text-white">
-                </div>
-                <button onclick="savePurchase()" class="mt-4 w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold p-3 rounded-lg">खरीद रिकॉर्ड सेव करें</button>
-            </div>
-
-            <div class="bg-gray-800 p-6 rounded-xl border border-gray-700">
-                <h2 class="text-lg font-semibold mb-4 text-emerald-300">खरीद रिकॉर्ड (Purchase History)</h2>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-right border-collapse">
-                        <thead>
-                            <tr class="border-b border-gray-700 text-gray-400">
-                                <th class="p-3">सप्लायर</th>
-                                <th class="p-3">विवरण</th>
-                                <th class="p-3">लागत</th>
-                                <th class="p-3 text-center">डिलीट</th>
-                            </tr>
-                        </thead>
-                        <tbody id="purchaseTableBody">
-                            <tr><td colspan="4" class="text-center p-4 text-gray-500">कोई खरीद रिकॉर्ड नहीं है।</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- TAB 4: CASH BOOK -->
-        <div id="tab-cashbook" class="space-y-6 hidden">
-            <div class="bg-gray-800 p-6 rounded-xl border border-gray-700">
-                <h2 class="text-lg font-semibold mb-4 text-emerald-300">कैश बुक एंट्री (Cash In / Out)</h2>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <input type="text" id="cDesc" placeholder="विवरण (किस बात का लेन-देन)" class="bg-gray-900 border border-gray-700 p-3 rounded-lg text-white">
-                    <input type="number" id="cAmount" placeholder="रकम (Amount)" class="bg-gray-900 border border-gray-700 p-3 rounded-lg text-white">
-                    <select id="cType" class="bg-gray-900 border border-gray-700 p-3 rounded-lg text-white">
-                        <option value="IN">कैश आया (In)</option>
-                        <option value="OUT">कैश गया (Out)</option>
-                    </select>
-                </div>
-                <button onclick="saveCashBook()" class="mt-4 w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold p-3 rounded-lg">कैश एंट्री सेव करें</button>
-            </div>
-
-            <div class="bg-gray-800 p-6 rounded-xl border border-gray-700">
-                <h2 class="text-lg font-semibold mb-4 text-emerald-300">कैश बुक लेजर</h2>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-right border-collapse">
-                        <thead>
-                            <tr class="border-b border-gray-700 text-gray-400">
-                                <th class="p-3">विवरण</th>
-                                <th class="p-3">टाइप</th>
-                                <th class="p-3">रकम</th>
-                                <th class="p-3 text-center">डिलीट</th>
-                            </tr>
-                        </thead>
-                        <tbody id="cashTableBody">
-                            <tr><td colspan="4" class="text-center p-4 text-gray-500">कोई कैश एंट्री नहीं है।</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- TAB 5: EXPENSES -->
-        <div id="tab-expense" class="space-y-6 hidden">
-            <div class="bg-gray-800 p-6 rounded-xl border border-gray-700">
-                <h2 class="text-lg font-semibold mb-4 text-emerald-300">दुकान का खर्चा दर्ज करें</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <input type="text" id="eTitle" placeholder="खर्च का नाम (जैसे: बिजली बिल, चाय, आदि)" class="bg-gray-900 border border-gray-700 p-3 rounded-lg text-white">
-                    <input type="number" id="eAmount" placeholder="खर्च की रकम" class="bg-gray-900 border border-gray-700 p-3 rounded-lg text-white">
-                </div>
-                <button onclick="saveExpense()" class="mt-4 w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold p-3 rounded-lg">खर्चा सेव करें</button>
-            </div>
-
-            <div class="bg-gray-800 p-6 rounded-xl border border-gray-700">
-                <h2 class="text-lg font-semibold mb-4 text-emerald-300">खर्चों की लिस्ट</h2>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-right border-collapse">
-                        <thead>
-                            <tr class="border-b border-gray-700 text-gray-400">
-                                <th class="p-3">विवरण</th>
-                                <th class="p-3">रकम</th>
-                                <th class="p-3 text-center">डिलीट</th>
-                            </tr>
-                        </thead>
-                        <tbody id="expenseTableBody">
-                            <tr><td colspan="3" class="text-center p-4 text-gray-500">कोई खर्चा दर्ज नहीं है।</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+    <div id="loginScreen" class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-gray-800 border border-gray-700 p-8 rounded-2xl shadow-2xl w-full max-w-md text-center">
+            <h1 class="text-3xl font-extrabold text-green-400 mb-2">Evee Center Sanghar</h1>
+            <p class="text-gray-400 mb-6 text-sm">Enter password to log in to the portal</p>
+            <form onsubmit="handleLogin(event)" class="space-y-4">
+                <input type="password" id="loginPassword" placeholder="Enter Password" required
+                    class="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-xl text-center text-lg focus:outline-none focus:border-green-500">
+                <button type="submit" class="w-full py-3 bg-green-500 hover:bg-green-600 text-gray-950 font-bold rounded-xl transition duration-200">
+                    Log In
+                </button>
+            </form>
+            <p id="loginError" class="text-red-400 text-sm mt-4 hidden">Incorrect Password! Please try again.</p>
         </div>
     </div>
 
-    <!-- Printable Invoice Modal -->
-    <div id="invoiceModal" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4">
-        <div id="printableInvoice" class="bg-white text-gray-900 p-8 rounded-xl max-w-lg w-full shadow-2xl relative">
-            <div class="text-center border-b pb-4 mb-4">
-                <h2 class="text-2xl font-bold text-emerald-700">EVEE CENTER SANGHAR</h2>
-                <p class="text-sm text-gray-600">नवाबशाह रोड, संगर</p>
-                <p class="text-xs text-gray-500">प्रोप्राइटर: गुलाम शब्बीर | मोबाइल: 03332921575</p>
-                <h3 class="text-lg font-semibold mt-2 text-gray-800 border-t pt-2">SALE INVOICE</h3>
+    <!-- MAIN DASHBOARD -->
+    <div id="mainDashboard" class="hidden">
+        <!-- Navigation Header -->
+        <nav class="bg-gray-800 border-b border-gray-700 px-6 py-4 flex flex-wrap justify-between items-center shadow-md">
+            <div>
+                <h1 class="text-2xl font-black text-green-400">EVEE CENTER SANGHAR</h1>
+                <p class="text-xs text-gray-400">Nawabshah Road, Sanghar • Management Portal</p>
             </div>
-            <div class="mb-4 text-sm space-y-1">
-                <p><strong>ग्राहक का नाम:</strong> <span id="invCustomer"></span></p>
-                <p><strong>मोबाइल नंबर:</strong> <span id="invPhone"></span></p>
-                <p><strong>तारीख:</strong> <span id="invDate"></span></p>
+            <div class="flex gap-2 mt-3 sm:mt-0 flex-wrap">
+                <button onclick="switchTab('dashboard')" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-sm font-medium transition">Dashboard</button>
+                <button onclick="switchTab('stock')" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-sm font-medium transition">Stock</button>
+                <button onclick="switchTab('sales')" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-sm font-medium transition">Sales & Invoice</button>
+                <button onclick="switchTab('cashbook')" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-sm font-medium transition">Cash Book</button>
+                <button onclick="logout()" class="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg text-sm font-medium transition">Log Out</button>
             </div>
-            <table class="w-full border-collapse mb-4 text-sm">
-                <thead>
-                    <tr class="border-b bg-gray-100">
-                        <th class="p-2 text-right">विवरण (Description)</th>
-                        <th class="p-2 text-left">अमाउंट (Amount)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr class="border-b">
-                        <td class="p-2" id="invModelDesc"></td>
-                        <td class="p-2 text-left" id="invPrice"></td>
-                    </tr>
-                </tbody>
-            </table>
-            <div class="text-left font-bold text-lg mb-6">
-                कुल भुगतान: <span id="invTotal" class="text-emerald-600"></span>
+        </nav>
+
+        <!-- Content Area -->
+        <main class="p-6 max-w-7xl mx-auto space-y-6">
+
+            <!-- TAB 1: DASHBOARD -->
+            <div id="tab-dashboard" class="space-y-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="bg-gray-800 border border-gray-700 p-5 rounded-xl shadow">
+                        <p class="text-gray-400 text-sm">Total Bikes in Stock</p>
+                        <h3 id="statTotalStock" class="text-3xl font-bold text-green-400 mt-1">0</h3>
+                    </div>
+                    <div class="bg-gray-800 border border-gray-700 p-5 rounded-xl shadow">
+                        <p class="text-gray-400 text-sm">Total Sales Revenue</p>
+                        <h3 id="statTotalSales" class="text-3xl font-bold text-blue-400 mt-1">PKR 0</h3>
+                    </div>
+                    <div class="bg-gray-800 border border-gray-700 p-5 rounded-xl shadow">
+                        <p class="text-gray-400 text-sm">Total Cash in Hand</p>
+                        <h3 id="statCashInHand" class="text-3xl font-bold text-emerald-400 mt-1">PKR 0</h3>
+                    </div>
+                    <div class="bg-gray-800 border border-gray-700 p-5 rounded-xl shadow">
+                        <p class="text-gray-400 text-sm">Total Expenses</p>
+                        <h3 id="statTotalExpenses" class="text-3xl font-bold text-red-400 mt-1">PKR 0</h3>
+                    </div>
+                </div>
             </div>
-            <div class="flex justify-between items-center mt-8">
-                <button onclick="window.print()" class="bg-emerald-600 text-white px-4 py-2 rounded">प्रिंट इनवॉइस (Print)</button>
-                <button onclick="closeInvoice()" class="bg-gray-500 text-white px-4 py-2 rounded">बंद करें</button>
+
+            <!-- TAB 2: STOCK MANAGEMENT -->
+            <div id="tab-stock" class="hidden space-y-6">
+                <div class="bg-gray-800 border border-gray-700 p-6 rounded-xl shadow">
+                    <h2 class="text-xl font-bold text-green-400 mb-4">Add New EVEE Model / Stock</h2>
+                    <form onsubmit="addStockItem(event)" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <input type="text" id="stockModel" placeholder="Model (e.g. EVEE S-Qube)" required class="px-4 py-2 bg-gray-900 border border-gray-700 rounded-lg">
+                        <input type="text" id="stockChassis" placeholder="Chassis Number" required class="px-4 py-2 bg-gray-900 border border-gray-700 rounded-lg">
+                        <input type="text" id="stockMotor" placeholder="Motor Number" required class="px-4 py-2 bg-gray-900 border border-gray-700 rounded-lg">
+                        <input type="number" id="stockPrice" placeholder="Purchase Price (PKR)" required class="px-4 py-2 bg-gray-900 border border-gray-700 rounded-lg">
+                        <button type="submit" class="sm:col-span-2 lg:col-span-4 py-2 bg-green-500 hover:bg-green-600 text-gray-950 font-bold rounded-lg">Add to Stock</button>
+                    </form>
+                </div>
+                <div class="bg-gray-800 border border-gray-700 p-6 rounded-xl shadow overflow-x-auto">
+                    <h2 class="text-xl font-bold text-green-400 mb-4">Current Inventory / Stock</h2>
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b border-gray-700 text-gray-400 text-sm">
+                                <th class="p-3">Model</th>
+                                <th class="p-3">Chassis No</th>
+                                <th class="p-3">Motor No</th>
+                                <th class="p-3">Price (PKR)</th>
+                                <th class="p-3">Status</th>
+                                <th class="p-3">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="stockTableBody"></tbody>
+                    </table>
+                </div>
             </div>
-        </div>
+
+            <!-- TAB 3: SALES & INVOICE -->
+            <div id="tab-sales" class="hidden space-y-6">
+                <div class="bg-gray-800 border border-gray-700 p-6 rounded-xl shadow">
+                    <h2 class="text-xl font-bold text-green-400 mb-4">Create Sale & Print Invoice</h2>
+                    <form onsubmit="createSale(event)" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <input type="text" id="customerName" placeholder="Customer Name" required class="px-4 py-2 bg-gray-900 border border-gray-700 rounded-lg">
+                        <input type="text" id="customerPhone" placeholder="Customer Phone Number" required class="px-4 py-2 bg-gray-900 border border-gray-700 rounded-lg">
+                        <select id="saleStockSelect" required class="px-4 py-2 bg-gray-900 border border-gray-700 rounded-lg text-gray-200">
+                            <option value="">Select Available Bike</option>
+                        </select>
+                        <input type="number" id="salePrice" placeholder="Selling Price (PKR)" required class="px-4 py-2 bg-gray-900 border border-gray-700 rounded-lg">
+                        <button type="submit" class="sm:col-span-2 py-3 bg-blue-500 hover:bg-blue-600 text-gray-950 font-bold rounded-lg">Complete Sale & Generate Invoice</button>
+                    </form>
+                </div>
+
+                <!-- Printable Invoice Box -->
+                <div id="printableInvoice" class="bg-white text-gray-900 p-8 rounded-xl shadow-lg max-w-2xl mx-auto hidden">
+                    <div class="text-center border-b pb-4 mb-4">
+                        <h2 class="text-2xl font-black text-green-700">EVEE CENTER SANGHAR</h2>
+                        <p class="text-sm text-gray-600">Nawabshah Road, Sanghar, Sindh</p>
+                        <p class="text-xs text-gray-500 mt-1">Authorized Dealer Electric Motorcycles & Scooters</p>
+                    </div>
+                    <div class="mb-4 flex justify-between text-sm">
+                        <div><strong>Customer:</strong> <span id="invCustomer"></span></div>
+                        <div><strong>Date:</strong> <span id="invDate"></span></div>
+                    </div>
+                    <table class="w-full mb-6 border-collapse text-sm">
+                        <thead>
+                            <tr class="bg-gray-100 border-b">
+                                <th class="p-2 text-left">Description / Model</th>
+                                <th class="p-2 text-left">Chassis No</th>
+                                <th class="p-2 text-left">Motor No</th>
+                                <th class="p-2 text-right">Amount (PKR)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b">
+                                <td class="p-2" id="invModel"></td>
+                                <td class="p-2" id="invChassis"></td>
+                                <td class="p-2" id="invMotor"></td>
+                                <td class="p-2 text-right" id="invAmount"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="text-right mb-8">
+                        <span class="text-lg font-bold">Total Paid: PKR <span id="invTotal"></span></span>
+                    </div>
+                    <div class="flex justify-between pt-8 border-t text-sm text-gray-600">
+                        <div>Customer Signature: ________________</div>
+                        <div>Authorized Stamp: ________________</div>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button onclick="window.print()" id="printBtn" class="hidden px-6 py-2 bg-gray-700 hover:bg-gray-600 text-white font-bold rounded-lg">Print Invoice</button>
+                </div>
+            </div>
+
+            <!-- TAB 4: CASH BOOK -->
+            <div id="tab-cashbook" class="hidden space-y-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div class="bg-gray-800 border border-gray-700 p-6 rounded-xl shadow">
+                        <h2 class="text-xl font-bold text-red-400 mb-4">Add Business Expense</h2>
+                        <form onsubmit="addExpense(event)" class="space-y-4">
+                            <input type="text" id="expenseReason" placeholder="Expense Reason (e.g. Electricity Bill)" required class="w-full px-4 py-2 bg-gray-900 border border-gray-700 rounded-lg">
+                            <input type="number" id="expenseAmount" placeholder="Amount (PKR)" required class="w-full px-4 py-2 bg-gray-900 border border-gray-700 rounded-lg">
+                            <button type="submit" class="w-full py-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg">Record Expense</button>
+                        </form>
+                    </div>
+                    <div class="bg-gray-800 border border-gray-700 p-6 rounded-xl shadow">
+                        <h2 class="text-xl font-bold text-green-400 mb-4">Cash Summary</h2>
+                        <div class="space-y-3">
+                            <div class="flex justify-between border-b border-gray-700 pb-2">
+                                <span class="text-gray-400">Total Income (Sales):</span>
+                                <span id="cashTotalIncome" class="font-bold text-blue-400">PKR 0</span>
+                            </div>
+                            <div class="flex justify-between border-b border-gray-700 pb-2">
+                                <span class="text-gray-400">Total Expenses:</span>
+                                <span id="cashTotalExpenses" class="font-bold text-red-400">PKR 0</span>
+                            </div>
+                            <div class="flex justify-between pt-2 text-lg">
+                                <span class="font-bold text-gray-200">Net Cash in Hand:</span>
+                                <span id="cashNetBalance" class="font-black text-emerald-400">PKR 0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
     </div>
 
     <script>
-        // पासवर्ड सेट करें (आप चाहें तो 'evee123' की जगह अपना कोई भी पासवर्ड रख सकते हैं)
-        const ADMIN_PASSWORD = "evee123";
+        let db = JSON.parse(localStorage.getItem('evee_db')) || {
+            stock: [],
+            sales: [],
+            expenses: []
+        };
 
-        function checkLogin() {
+        function saveData() {
+            localStorage.setItem('evee_db', JSON.stringify(db));
+            updateDashboard();
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
             const pass = document.getElementById('loginPassword').value;
-            if(pass === ADMIN_PASSWORD) {
-                localStorage.setItem('evee_logged_in', 'true');
-                showApp();
+            if (pass === 'evee123') {
+                document.getElementById('loginScreen').classList.add('hidden');
+                document.getElementById('mainDashboard').classList.remove('hidden');
+                updateDashboard();
             } else {
                 document.getElementById('loginError').classList.remove('hidden');
             }
         }
 
-        function showApp() {
-            document.getElementById('loginScreen').classList.add('hidden');
-            document.getElementById('mainApp').classList.remove('hidden');
-            renderStock();
-            renderSales();
-            renderPurchase();
-            renderCashBook();
-            renderExpense();
-        }
-
         function logout() {
-            localStorage.removeItem('evee_logged_in');
-            location.reload();
+            document.getElementById('mainDashboard').classList.add('hidden');
+            document.getElementById('loginScreen').classList.remove('hidden');
+            document.getElementById('loginPassword').value = '';
         }
-
-        window.onload = function() {
-            if(localStorage.getItem('evee_logged_in') === 'true') {
-                showApp();
-            }
-        }
-
-        let stock = JSON.parse(localStorage.getItem('evee_stock_v5')) || [];
-        let sales = JSON.parse(localStorage.getItem('evee_sales_v5')) || [];
-        let purchases = JSON.parse(localStorage.getItem('evee_purchase_v5')) || [];
-        let cashbook = JSON.parse(localStorage.getItem('evee_cash_v5')) || [];
-        let expenses = JSON.parse(localStorage.getItem('evee_expense_v5')) || [];
 
         function switchTab(tabName) {
-            ['stock', 'sales', 'purchase', 'cashbook', 'expense'].forEach(t => {
+            ['dashboard', 'stock', 'sales', 'cashbook'].forEach(t => {
                 document.getElementById('tab-' + t).classList.add('hidden');
-                document.getElementById('btn-' + t).className = "bg-gray-800 border border-gray-700 px-4 py-2 rounded-lg text-gray-300 transition";
             });
             document.getElementById('tab-' + tabName).classList.remove('hidden');
-            document.getElementById('btn-' + tabName).className = "bg-emerald-600 px-4 py-2 rounded-lg font-bold text-white transition";
+            if (tabName === 'stock') renderStock();
+            if (tabName === 'sales') updateStockDropdown();
+            if (tabName === 'cashbook') updateCashBook();
+        }
+
+        function addStockItem(e) {
+            e.preventDefault();
+            const newItem = {
+                id: Date.now(),
+                model: document.getElementById('stockModel').value,
+                chassis: document.getElementById('stockChassis').value,
+                motor: document.getElementById('stockMotor').value,
+                price: parseFloat(document.getElementById('stockPrice').value),
+                status: 'Available'
+            };
+            db.stock.push(newItem);
+            saveData();
+            e.target.reset();
+            renderStock();
+            alert('Stock added successfully!');
         }
 
         function renderStock() {
             const tbody = document.getElementById('stockTableBody');
-            if (stock.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" class="text-center p-4 text-gray-500">कोई डेटा नहीं है।</td></tr>`;
-                return;
-            }
-            tbody.innerHTML = stock.map((item, index) => `
-                <tr class="border-b border-gray-700/50">
-                    <td class="p-3">${item.model}</td>
-                    <td class="p-3 text-sm text-gray-400">C: ${item.chassis}<br>M: ${item.motor}</td>
-                    <td class="p-3">RS ${item.price}</td>
-                    <td class="p-3 text-center flex justify-center gap-2">
-                        <button onclick="editStock(${index})" class="bg-blue-600 px-3 py-1 rounded text-sm text-white">Edit</button>
-                        <button onclick="deleteStock(${index})" class="bg-red-600 px-3 py-1 rounded text-sm text-white">Delete</button>
-                    </td>
-                </tr>
-            `).join('');
+            tbody.innerHTML = '';
+            db.stock.forEach(item => {
+                tbody.innerHTML += `
+                    <tr class="border-b border-gray-700 text-sm">
+                        <td class="p-3">${item.model}</td>
+                        <td class="p-3">${item.chassis}</td>
+                        <td class="p-3">${item.motor}</td>
+                        <td class="p-3">${item.price}</td>
+                        <td class="p-3"><span class="px-2 py-1 rounded text-xs ${item.status === 'Available' ? 'bg-green-900 text-green-300' : 'bg-gray-700 text-gray-400'}">${item.status}</span></td>
+                        <td class="p-3"><button onclick="deleteStock(${item.id})" class="text-red-400 hover:text-red-300">Delete</button></td>
+                    </tr>
+                `;
+            });
         }
 
-        function saveStock() {
-            const model = document.getElementById('sModel').value;
-            const chassis = document.getElementById('sChassis').value;
-            const motor = document.getElementById('sMotor').value;
-            const price = document.getElementById('sPrice').value;
-            const editIndex = document.getElementById('editStockIndex').value;
-
-            if(!model || !chassis || !motor || !price) { alert('सभी फील्ड भरें!'); return; }
-
-            if(editIndex === "-1") {
-                stock.push({ model, chassis, motor, price });
-            } else {
-                stock[editIndex] = { model, chassis, motor, price };
-                resetStockForm();
-            }
-            localStorage.setItem('evee_stock_v5', JSON.stringify(stock));
-            clearStockInputs();
+        function deleteStock(id) {
+            db.stock = db.stock.filter(i => i.id !== id);
+            saveData();
             renderStock();
         }
 
-        function editStock(index) {
-            const item = stock[index];
-            document.getElementById('sModel').value = item.model;
-            document.getElementById('sChassis').value = item.chassis;
-            document.getElementById('sMotor').value = item.motor;
-            document.getElementById('sPrice').value = item.price;
-            document.getElementById('editStockIndex').value = index;
-            document.getElementById('stockFormTitle').innerText = "स्टॉक एडिट करें";
-            document.getElementById('stockSaveBtn').innerText = "अपडेट करें";
-            document.getElementById('stockCancelBtn').classList.remove('hidden');
+        function updateStockDropdown() {
+            const select = document.getElementById('saleStockSelect');
+            select.innerHTML = '<option value="">Select Available Bike</option>';
+            db.stock.filter(i => i.status === 'Available').forEach(item => {
+                select.innerHTML += `<option value="${item.id}">${item.model} (Chassis: ${item.chassis})</option>`;
+            });
         }
 
-        function deleteStock(index) {
-            if(confirm('डिलीट करना चाहते हैं?')) {
-                stock.splice(index, 1);
-                localStorage.setItem('evee_stock_v5', JSON.stringify(stock));
-                renderStock();
-            }
-        }
-
-        function resetStockForm() {
-            clearStockInputs();
-            document.getElementById('editStockIndex').value = "-1";
-            document.getElementById('stockFormTitle').innerText = "नई बाइक स्टॉक एंट्री";
-            document.getElementById('stockSaveBtn').innerText = "स्टॉक सेव करें";
-            document.getElementById('stockCancelBtn').classList.add('hidden');
-        }
-
-        function clearStockInputs() {
-            document.getElementById('sModel').value = '';
-            document.getElementById('sChassis').value = '';
-            document.getElementById('sMotor').value = '';
-            document.getElementById('sPrice').value = '';
-        }
-
-        function renderSales() {
-            const tbody = document.getElementById('salesTableBody');
-            if (sales.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" class="text-center p-4 text-gray-500">कोई बिक्री रिकॉर्ड नहीं है।</td></tr>`;
+        function createSale(e) {
+            e.preventDefault();
+            const stockId = document.getElementById('saleStockSelect').value;
+            if (!stockId) {
+                alert('Please select a bike from stock!');
                 return;
             }
-            tbody.innerHTML = sales.map((item, index) => `
-                <tr class="border-b border-gray-700/50">
-                    <td class="p-3">${item.customer}<br><span class="text-xs text-gray-400">${item.phone}</span></td>
-                    <td class="p-3">${item.model}</td>
-                    <td class="p-3">RS ${item.amount}</td>
-                    <td class="p-3 text-center flex justify-center gap-2">
-                        <button onclick="printInvoice(${index})" class="bg-emerald-600 px-3 py-1 rounded text-sm text-white">Invoice</button>
-                        <button onclick="deleteSale(${index})" class="bg-red-600 px-3 py-1 rounded text-sm text-white">Delete</button>
-                    </td>
-                </tr>
-            `).join('');
+            const stockItem = db.stock.find(i => i.id == stockId);
+            stockItem.status = 'Sold';
+
+            const saleData = {
+                id: Date.now(),
+                customerName: document.getElementById('customerName').value,
+                customerPhone: document.getElementById('customerPhone').value,
+                model: stockItem.model,
+                chassis: stockItem.chassis,
+                motor: stockItem.motor,
+                price: parseFloat(document.getElementById('salePrice').value),
+                date: new Date().toLocaleDateString()
+            };
+            db.sales.push(saleData);
+            saveData();
+
+            // Populate Invoice
+            document.getElementById('invCustomer').innerText = saleData.customerName;
+            document.getElementById('invDate').innerText = saleData.date;
+            document.getElementById('invModel').innerText = saleData.model;
+            document.getElementById('invChassis').innerText = saleData.chassis;
+            document.getElementById('invMotor').innerText = saleData.motor;
+            document.getElementById('invAmount').innerText = saleData.price.toLocaleString();
+            document.getElementById('invTotal').innerText = saleData.price.toLocaleString();
+
+            document.getElementById('printableInvoice').classList.remove('hidden');
+            document.getElementById('printBtn').classList.remove('hidden');
+            e.target.reset();
+            updateStockDropdown();
+            alert('Sale completed and invoice generated successfully!');
         }
 
-        function saveSale() {
-            const customer = document.getElementById('saleCustomer').value;
-            const phone = document.getElementById('salePhone').value;
-            const model = document.getElementById('saleModel').value;
-            const amount = document.getElementById('saleAmount').value;
-
-            if(!customer || !model || !amount) { alert('सभी फील्ड भरें!'); return; }
-
-            sales.push({ customer, phone, model, amount, date: new Date().toLocaleDateString() });
-            localStorage.setItem('evee_sales_v5', JSON.stringify(sales));
-            document.getElementById('saleCustomer').value = '';
-            document.getElementById('salePhone').value = '';
-            document.getElementById('saleModel').value = '';
-            document.getElementById('saleAmount').value = '';
-            renderSales();
+        function addExpense(e) {
+            e.preventDefault();
+            const exp = {
+                id: Date.now(),
+                reason: document.getElementById('expenseReason').value,
+                amount: parseFloat(document.getElementById('expenseAmount').value),
+                date: new Date().toLocaleDateString()
+            };
+            db.expenses.push(exp);
+            saveData();
+            e.target.reset();
+            updateCashBook();
+            alert('Expense recorded successfully!');
         }
 
-        function deleteSale(index) {
-            if(confirm('डिलीट करना चाहते हैं?')) {
-                sales.splice(index, 1);
-                localStorage.setItem('evee_sales_v5', JSON.stringify(sales));
-                renderSales();
-            }
+        function updateCashBook() {
+            const totalIncome = db.sales.reduce((sum, s) => sum + s.price, 0);
+            const totalExpenses = db.expenses.reduce((sum, ex) => sum + ex.amount, 0);
+            document.getElementById('cashTotalIncome').innerText = 'PKR ' + totalIncome.toLocaleString();
+            document.getElementById('cashTotalExpenses').innerText = 'PKR ' + totalExpenses.toLocaleString();
+            document.getElementById('cashNetBalance').innerText = 'PKR ' + (totalIncome - totalExpenses).toLocaleString();
         }
 
-        function printInvoice(index) {
-            const item = sales[index];
-            document.getElementById('invCustomer').innerText = item.customer;
-            document.getElementById('invPhone').innerText = item.phone || '-';
-            document.getElementById('invDate').innerText = item.date;
-            document.getElementById('invModelDesc').innerText = item.model;
-            document.getElementById('invPrice').innerText = `RS ${item.amount}`;
-            document.getElementById('invTotal').innerText = `RS ${item.amount}`;
-            document.getElementById('invoiceModal').classList.remove('hidden');
-        }
-
-        function closeInvoice() {
-            document.getElementById('invoiceModal').classList.add('hidden');
-        }
-
-        function renderPurchase() {
-            const tbody = document.getElementById('purchaseTableBody');
-            if (purchases.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" class="text-center p-4 text-gray-500">कोई खरीद रिकॉर्ड नहीं है।</td></tr>`;
-                return;
-            }
-            tbody.innerHTML = purchases.map((item, index) => `
-                <tr class="border-b border-gray-700/50">
-                    <td class="p-3">${item.supplier}</td>
-                    <td class="p-3">${item.item}</td>
-                    <td class="p-3">RS ${item.cost}</td>
-                    <td class="p-3 text-center"><button onclick="deletePurchase(${index})" class="bg-red-600 px-3 py-1 rounded text-sm text-white">Delete</button></td>
-                </tr>
-            `).join('');
-        }
-
-        function savePurchase() {
-            const supplier = document.getElementById('pSupplier').value;
-            const item = document.getElementById('pItem').value;
-            const cost = document.getElementById('pCost').value;
-            if(!supplier || !item || !cost) { alert('सभी फील्ड भरें!'); return; }
-            purchases.push({ supplier, item, cost });
-            localStorage.setItem('evee_purchase_v5', JSON.stringify(purchases));
-            document.getElementById('pSupplier').value = '';
-            document.getElementById('pItem').value = '';
-            document.getElementById('pCost').value = '';
-            renderPurchase();
-        }
-
-        function deletePurchase(index) {
-            purchases.splice(index, 1);
-            localStorage.setItem('evee_purchase_v5', JSON.stringify(purchases));
-            renderPurchase();
-        }
-
-        function renderCashBook() {
-            const tbody = document.getElementById('cashTableBody');
-            if (cashbook.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" class="text-center p-4 text-gray-500">कोई कैश एंट्री नहीं है।</td></tr>`;
-                return;
-            }
-            tbody.innerHTML = cashbook.map((item, index) => `
-                <tr class="border-b border-gray-700/50">
-                    <td class="p-3">${item.desc}</td>
-                    <td class="p-3"><span class="${item.type === 'IN' ? 'text-emerald-400' : 'text-red-400'}">${item.type}</span></td>
-                    <td class="p-3">RS ${item.amount}</td>
-                    <td class="p-3 text-center"><button onclick="deleteCash(${index})" class="bg-red-600 px-3 py-1 rounded text-sm text-white">Delete</button></td>
-                </tr>
-            `).join('');
-        }
-
-        function saveCashBook() {
-            const desc = document.getElementById('cDesc.value') || document.getElementById('cDesc').value;
-            const amount = document.getElementById('cAmount').value;
-            const type = document.getElementById('cType').value;
-            if(!desc || !amount) { alert('सभी फील्ड भरें!'); return; }
-            cashbook.push({ desc, amount, type });
-            localStorage.setItem('evee_cash_v5', JSON.stringify(cashbook));
-            document.getElementById('cDesc').value = '';
-            document.getElementById('cAmount').value = '';
-            renderCashBook();
-        }
-
-        function deleteCash(index) {
-            cashbook.splice(index, 1);
-            localStorage.setItem('evee_cash_v5', JSON.stringify(cashbook));
-            renderCashBook();
-        }
-
-        function renderExpense() {
-            const tbody = document.getElementById('expenseTableBody');
-            if (expenses.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="3" class="text-center p-4 text-gray-500">कोई खर्चा दर्ज नहीं है।</td></tr>`;
-                return;
-            }
-            tbody.innerHTML = expenses.map((item, index) => `
-                <tr class="border-b border-gray-700/50">
-                    <td class="p-3">${item.title}</td>
-                    <td class="p-3">RS ${item.amount}</td>
-                    <td class="p-3 text-center"><button onclick="deleteExpense(${index})" class="bg-red-600 px-3 py-1 rounded text-sm text-white">Delete</button></td>
-                </tr>
-            `).join('');
-        }
-
-        function saveExpense() {
-            const title = document.getElementById('eTitle').value;
-            const amount = document.getElementById('eAmount').value;
-            if(!title || !amount) { alert('सभी फील्ड भरें!'); return; }
-            expenses.push({ title, amount });
-            localStorage.setItem('evee_expense_v5', JSON.stringify(expenses));
-            document.getElementById('eTitle').value = '';
-            document.getElementById('eAmount').value = '';
-            renderExpense();
-        }
-
-        function deleteExpense(index) {
-            expenses.splice(index, 1);
-            localStorage.setItem('evee_expense_v5', JSON.stringify(expenses));
-            renderExpense();
+        function updateDashboard() {
+            const totalStock = db.stock.filter(i => i.status === 'Available').length;
+            const totalSales = db.sales.reduce((sum, s) => sum + s.price, 0);
+            const totalExpenses = db.expenses.reduce((sum, ex) => sum + ex.amount, 0);
+            document.getElementById('statTotalStock').innerText = totalStock;
+            document.getElementById('statTotalSales').innerText = 'PKR ' + totalSales.toLocaleString();
+            document.getElementById('statCashInHand').innerText = 'PKR ' + (totalSales - totalExpenses).toLocaleString();
+            document.getElementById('statTotalExpenses').innerText = 'PKR ' + totalExpenses.toLocaleString();
         }
     </script>
 </body>
