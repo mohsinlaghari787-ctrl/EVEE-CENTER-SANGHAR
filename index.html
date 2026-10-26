@@ -3,206 +3,269 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Evee Center Sanghar - Secure Business Portal</title>
+    <title>Evee Center Sanghar - Business Management Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @media print {
             body * { visibility: hidden; }
             #printableInvoice, #printableInvoice * { visibility: visible; }
-            #printableInvoice { position: absolute; left: 0; top: 0; width: 100%; }
+            #printableInvoice { position: absolute; left: 0; top: 0; width: 100%; padding: 20px; background: white; color: black; }
         }
     </style>
 </head>
-<body class="bg-gray-900 text-gray-100 font-sans min-h-screen">
+<body class="bg-gray-950 text-gray-100 font-sans min-h-screen">
 
     <!-- LOGIN SCREEN -->
     <div id="loginScreen" class="flex items-center justify-center min-h-screen p-4">
-        <div class="bg-gray-800 border border-gray-700 p-8 rounded-2xl shadow-2xl w-full max-w-md text-center">
-            <h1 class="text-3xl font-extrabold text-green-400 mb-2">Evee Center Sanghar</h1>
-            <p class="text-gray-400 mb-6 text-sm">Enter password to log in to the portal</p>
+        <div class="bg-gray-900 border border-gray-800 p-8 rounded-2xl shadow-2xl w-full max-w-md text-center">
+            <h1 class="text-3xl font-extrabold text-green-400 mb-1">Evee Center Sanghar</h1>
+            <p class="text-xs text-gray-400 mb-6">Prop: Ghulam Shabbir • Mob: 03332921575</p>
             <form onsubmit="handleLogin(event)" class="space-y-4">
-                <input type="password" id="loginPassword" placeholder="Enter Password" required
-                    class="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-xl text-center text-lg focus:outline-none focus:border-green-500">
-                <button type="submit" class="w-full py-3 bg-green-500 hover:bg-green-600 text-gray-950 font-bold rounded-xl transition duration-200">
-                    Log In
+                <input type="password" id="loginPassword" placeholder="Enter Password (evee123)" required
+                    class="w-full px-4 py-3 bg-gray-950 border border-gray-800 rounded-xl text-center text-lg focus:outline-none focus:border-green-500">
+                <button type="submit" class="w-full py-3 bg-green-500 hover:bg-green-600 text-gray-950 font-bold rounded-xl transition">
+                    Log In to Portal
                 </button>
             </form>
-            <p id="loginError" class="text-red-400 text-sm mt-4 hidden">Incorrect Password! Please try again.</p>
+            <p id="loginError" class="text-red-400 text-sm mt-4 hidden">Incorrect Password! Try again.</p>
         </div>
     </div>
 
     <!-- MAIN DASHBOARD -->
     <div id="mainDashboard" class="hidden">
-        <!-- Navigation Header -->
-        <nav class="bg-gray-800 border-b border-gray-700 px-6 py-4 flex flex-wrap justify-between items-center shadow-md">
+        <!-- Navigation Bar -->
+        <nav class="bg-gray-900 border-b border-gray-800 px-6 py-4 flex flex-wrap justify-between items-center shadow-lg">
             <div>
-                <h1 class="text-2xl font-black text-green-400">EVEE CENTER SANGHAR</h1>
-                <p class="text-xs text-gray-400">Nawabshah Road, Sanghar • Management Portal</p>
+                <h1 class="text-2xl font-black text-green-400 tracking-wide">EVEE CENTER SANGHAR</h1>
+                <p class="text-xs text-gray-400">Nawabshah Road, Sanghar | Prop: Ghulam Shabbir (03332921575)</p>
             </div>
             <div class="flex gap-2 mt-3 sm:mt-0 flex-wrap">
-                <button onclick="switchTab('dashboard')" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-sm font-medium transition">Dashboard</button>
-                <button onclick="switchTab('stock')" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-sm font-medium transition">Stock</button>
-                <button onclick="switchTab('sales')" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-sm font-medium transition">Sales & Invoice</button>
-                <button onclick="switchTab('cashbook')" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-sm font-medium transition">Cash Book</button>
-                <button onclick="logout()" class="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg text-sm font-medium transition">Log Out</button>
+                <button onclick="switchTab('dashboard')" class="px-3 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg text-sm font-medium transition">Dashboard</button>
+                <button onclick="switchTab('purchase')" class="px-3 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg text-sm font-medium transition">Purchase / Stock</button>
+                <button onclick="switchTab('sales')" class="px-3 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg text-sm font-medium transition">Sales & Invoice</button>
+                <button onclick="switchTab('cashbook')" class="px-3 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg text-sm font-medium transition">Cash Book</button>
+                <button onclick="switchTab('udhar')" class="px-3 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg text-sm font-medium transition">Udhar Khata</button>
+                <button onclick="logout()" class="px-3 py-2 bg-red-600 hover:bg-red-700 rounded-lg text-sm font-medium transition">Log Out</button>
             </div>
         </nav>
 
-        <!-- Content Area -->
+        <!-- Main Container -->
         <main class="p-6 max-w-7xl mx-auto space-y-6">
 
             <!-- TAB 1: DASHBOARD -->
             <div id="tab-dashboard" class="space-y-6">
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div class="bg-gray-800 border border-gray-700 p-5 rounded-xl shadow">
-                        <p class="text-gray-400 text-sm">Total Bikes in Stock</p>
-                        <h3 id="statTotalStock" class="text-3xl font-bold text-green-400 mt-1">0</h3>
+                    <div class="bg-gray-900 border border-gray-800 p-5 rounded-xl shadow">
+                        <p class="text-gray-400 text-sm">Available Bikes in Stock</p>
+                        <h3 id="statStock" class="text-3xl font-bold text-green-400 mt-1">0</h3>
                     </div>
-                    <div class="bg-gray-800 border border-gray-700 p-5 rounded-xl shadow">
+                    <div class="bg-gray-900 border border-gray-800 p-5 rounded-xl shadow">
                         <p class="text-gray-400 text-sm">Total Sales Revenue</p>
-                        <h3 id="statTotalSales" class="text-3xl font-bold text-blue-400 mt-1">PKR 0</h3>
+                        <h3 id="statSales" class="text-3xl font-bold text-blue-400 mt-1">PKR 0</h3>
                     </div>
-                    <div class="bg-gray-800 border border-gray-700 p-5 rounded-xl shadow">
-                        <p class="text-gray-400 text-sm">Total Cash in Hand</p>
-                        <h3 id="statCashInHand" class="text-3xl font-bold text-emerald-400 mt-1">PKR 0</h3>
+                    <div class="bg-gray-900 border border-gray-800 p-5 rounded-xl shadow">
+                        <p class="text-gray-400 text-sm">Cash in Hand</p>
+                        <h3 id="statCash" class="text-3xl font-bold text-emerald-400 mt-1">PKR 0</h3>
                     </div>
-                    <div class="bg-gray-800 border border-gray-700 p-5 rounded-xl shadow">
-                        <p class="text-gray-400 text-sm">Total Expenses</p>
-                        <h3 id="statTotalExpenses" class="text-3xl font-bold text-red-400 mt-1">PKR 0</h3>
+                    <div class="bg-gray-900 border border-gray-800 p-5 rounded-xl shadow">
+                        <p class="text-gray-400 text-sm">Total Udhar / Receivable</p>
+                        <h3 id="statUdhar" class="text-3xl font-bold text-amber-400 mt-1">PKR 0</h3>
                     </div>
                 </div>
             </div>
 
-            <!-- TAB 2: STOCK MANAGEMENT -->
-            <div id="tab-stock" class="hidden space-y-6">
-                <div class="bg-gray-800 border border-gray-700 p-6 rounded-xl shadow">
-                    <h2 class="text-xl font-bold text-green-400 mb-4">Add New EVEE Model / Stock</h2>
-                    <form onsubmit="addStockItem(event)" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                        <input type="text" id="stockModel" placeholder="Model (e.g. EVEE S-Qube)" required class="px-4 py-2 bg-gray-900 border border-gray-700 rounded-lg">
-                        <input type="text" id="stockChassis" placeholder="Chassis Number" required class="px-4 py-2 bg-gray-900 border border-gray-700 rounded-lg">
-                        <input type="text" id="stockMotor" placeholder="Motor Number" required class="px-4 py-2 bg-gray-900 border border-gray-700 rounded-lg">
-                        <input type="number" id="stockPrice" placeholder="Purchase Price (PKR)" required class="px-4 py-2 bg-gray-900 border border-gray-700 rounded-lg">
-                        <button type="submit" class="sm:col-span-2 lg:col-span-4 py-2 bg-green-500 hover:bg-green-600 text-gray-950 font-bold rounded-lg">Add to Stock</button>
+            <!-- TAB 2: PURCHASE & STOCK MANAGEMENT -->
+            <div id="tab-purchase" class="hidden space-y-6">
+                <div class="bg-gray-900 border border-gray-800 p-6 rounded-xl shadow">
+                    <h2 class="text-xl font-bold text-green-400 mb-4">Add New Bike to Purchase/Inventory Stock</h2>
+                    <form onsubmit="addStock(event)" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <input type="text" id="pModel" placeholder="Model (e.g. EVEE S-Qube)" required class="px-4 py-2 bg-gray-950 border border-gray-800 rounded-lg">
+                        <input type="text" id="pChassis" placeholder="Chassis Number" required class="px-4 py-2 bg-gray-950 border border-gray-800 rounded-lg">
+                        <input type="text" id="pMotor" placeholder="Motor Number" required class="px-4 py-2 bg-gray-950 border border-gray-800 rounded-lg">
+                        <input type="number" id="pPrice" placeholder="Purchase Price (PKR)" required class="px-4 py-2 bg-gray-950 border border-gray-800 rounded-lg">
+                        <button type="submit" class="sm:col-span-2 lg:col-span-4 py-2.5 bg-green-500 hover:bg-green-600 text-gray-950 font-bold rounded-lg transition">Save Purchase Stock</button>
                     </form>
                 </div>
-                <div class="bg-gray-800 border border-gray-700 p-6 rounded-xl shadow overflow-x-auto">
-                    <h2 class="text-xl font-bold text-green-400 mb-4">Current Inventory / Stock</h2>
+
+                <div class="bg-gray-900 border border-gray-800 p-6 rounded-xl shadow overflow-x-auto">
+                    <h2 class="text-xl font-bold text-green-400 mb-4">Complete Inventory Stock Records</h2>
                     <table class="w-full text-left border-collapse">
                         <thead>
-                            <tr class="border-b border-gray-700 text-gray-400 text-sm">
+                            <tr class="border-b border-gray-800 text-gray-400 text-sm">
                                 <th class="p-3">Model</th>
                                 <th class="p-3">Chassis No</th>
                                 <th class="p-3">Motor No</th>
-                                <th class="p-3">Price (PKR)</th>
+                                <th class="p-3">Price</th>
                                 <th class="p-3">Status</th>
-                                <th class="p-3">Action</th>
+                                <th class="p-3">Actions</th>
                             </tr>
                         </thead>
-                        <tbody id="stockTableBody"></tbody>
+                        <tbody id="stockTable"></tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- TAB 3: SALES & INVOICE -->
+            <!-- TAB 3: SALES & A4 INVOICE -->
             <div id="tab-sales" class="hidden space-y-6">
-                <div class="bg-gray-800 border border-gray-700 p-6 rounded-xl shadow">
-                    <h2 class="text-xl font-bold text-green-400 mb-4">Create Sale & Print Invoice</h2>
+                <div class="bg-gray-900 border border-gray-800 p-6 rounded-xl shadow">
+                    <h2 class="text-xl font-bold text-green-400 mb-4">Create Sale & Generate A4 Invoice</h2>
                     <form onsubmit="createSale(event)" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <input type="text" id="customerName" placeholder="Customer Name" required class="px-4 py-2 bg-gray-900 border border-gray-700 rounded-lg">
-                        <input type="text" id="customerPhone" placeholder="Customer Phone Number" required class="px-4 py-2 bg-gray-900 border border-gray-700 rounded-lg">
-                        <select id="saleStockSelect" required class="px-4 py-2 bg-gray-900 border border-gray-700 rounded-lg text-gray-200">
-                            <option value="">Select Available Bike</option>
+                        <input type="text" id="cName" placeholder="Customer Full Name" required class="px-4 py-2 bg-gray-950 border border-gray-800 rounded-lg">
+                        <input type="text" id="cPhone" placeholder="Customer Phone Number" required class="px-4 py-2 bg-gray-950 border border-gray-800 rounded-lg">
+                        <select id="saleStockSelect" required class="px-4 py-2 bg-gray-950 border border-gray-800 rounded-lg text-gray-200">
+                            <option value="">Select Available Bike from Stock</option>
                         </select>
-                        <input type="number" id="salePrice" placeholder="Selling Price (PKR)" required class="px-4 py-2 bg-gray-900 border border-gray-700 rounded-lg">
-                        <button type="submit" class="sm:col-span-2 py-3 bg-blue-500 hover:bg-blue-600 text-gray-950 font-bold rounded-lg">Complete Sale & Generate Invoice</button>
+                        <input type="number" id="sPrice" placeholder="Selling Price (PKR)" required class="px-4 py-2 bg-gray-950 border border-gray-800 rounded-lg">
+                        <select id="paymentType" class="px-4 py-2 bg-gray-950 border border-gray-800 rounded-lg text-gray-200">
+                            <option value="Cash">Cash Paid</option>
+                            <option value="Udhar">Udhar (Credit)</option>
+                        </select>
+                        <input type="number" id="paidAmount" placeholder="Amount Paid Now (PKR)" required class="px-4 py-2 bg-gray-950 border border-gray-800 rounded-lg">
+                        <button type="submit" class="sm:col-span-2 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg transition">Complete Sale & Print A4 Invoice</button>
                     </form>
                 </div>
 
-                <!-- Printable Invoice Box -->
-                <div id="printableInvoice" class="bg-white text-gray-900 p-8 rounded-xl shadow-lg max-w-2xl mx-auto hidden">
-                    <div class="text-center border-b pb-4 mb-4">
-                        <h2 class="text-2xl font-black text-green-700">EVEE CENTER SANGHAR</h2>
+                <!-- Printable A4 Invoice Template -->
+                <div id="printableInvoice" class="hidden border border-gray-300 p-8 rounded-xl max-w-3xl mx-auto text-gray-900 bg-white shadow-2xl">
+                    <div class="text-center border-b-2 border-gray-800 pb-4 mb-4">
+                        <h1 class="text-3xl font-black text-green-700 tracking-wider">EVEE CENTER SANGHAR</h1>
+                        <p class="text-base font-semibold text-gray-700">Authorized Dealer Electric Motorcycles & Scooters</p>
                         <p class="text-sm text-gray-600">Nawabshah Road, Sanghar, Sindh</p>
-                        <p class="text-xs text-gray-500 mt-1">Authorized Dealer Electric Motorcycles & Scooters</p>
+                        <p class="text-sm font-bold text-gray-800 mt-1">Proprieter: Ghulam Shabbir &nbsp;|&nbsp; Mobile: 03332921575</p>
                     </div>
-                    <div class="mb-4 flex justify-between text-sm">
-                        <div><strong>Customer:</strong> <span id="invCustomer"></span></div>
-                        <div><strong>Date:</strong> <span id="invDate"></span></div>
+
+                    <div class="flex justify-between mb-6 text-sm">
+                        <div>
+                            <p><strong>Invoice No:</strong> <span id="invNo"></span></p>
+                            <p><strong>Date:</strong> <span id="invDate"></span></p>
+                        </div>
+                        <div class="text-right">
+                            <p><strong>Customer Name:</strong> <span id="invCustName"></span></p>
+                            <p><strong>Phone:</strong> <span id="invCustPhone"></span></p>
+                        </div>
                     </div>
-                    <table class="w-full mb-6 border-collapse text-sm">
+
+                    <table class="w-full mb-6 border border-gray-400 text-sm">
                         <thead>
-                            <tr class="bg-gray-100 border-b">
-                                <th class="p-2 text-left">Description / Model</th>
-                                <th class="p-2 text-left">Chassis No</th>
-                                <th class="p-2 text-left">Motor No</th>
-                                <th class="p-2 text-right">Amount (PKR)</th>
+                            <tr class="bg-gray-200 border-b border-gray-400 text-gray-900">
+                                <th class="p-2.5 text-left border-r border-gray-400">Item Description / Model</th>
+                                <th class="p-2.5 text-left border-r border-gray-400">Chassis No</th>
+                                <th class="p-2.5 text-left border-r border-gray-400">Motor No</th>
+                                <th class="p-2.5 text-right">Price (PKR)</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="border-b">
-                                <td class="p-2" id="invModel"></td>
-                                <td class="p-2" id="invChassis"></td>
-                                <td class="p-2" id="invMotor"></td>
-                                <td class="p-2 text-right" id="invAmount"></td>
+                            <tr class="border-b border-gray-300">
+                                <td class="p-2.5 border-r border-gray-300" id="invModel"></td>
+                                <td class="p-2.5 border-r border-gray-300" id="invChassis"></td>
+                                <td class="p-2.5 border-r border-gray-300" id="invMotor"></td>
+                                <td class="p-2.5 text-right font-semibold" id="invPrice"></td>
                             </tr>
                         </tbody>
                     </table>
-                    <div class="text-right mb-8">
-                        <span class="text-lg font-bold">Total Paid: PKR <span id="invTotal"></span></span>
+
+                    <div class="flex justify-between items-center mb-8 text-sm bg-gray-50 p-4 rounded border border-gray-200">
+                        <div>
+                            <p>Payment Status: <strong id="invPayStatus" class="text-green-700"></strong></p>
+                            <p>Amount Paid: PKR <span id="invPaid"></span></p>
+                            <p>Remaining Balance (Udhar): PKR <span id="invRemaining" class="text-red-600 font-bold"></span></p>
+                        </div>
+                        <div class="text-right text-lg font-black">
+                            Total Amount: PKR <span id="invTotal"></span>
+                        </div>
                     </div>
-                    <div class="flex justify-between pt-8 border-t text-sm text-gray-600">
-                        <div>Customer Signature: ________________</div>
-                        <div>Authorized Stamp: ________________</div>
+
+                    <div class="flex justify-between pt-16 border-t border-gray-400 text-sm text-gray-700 font-medium">
+                        <div>Customer's Signature: ____________________</div>
+                        <div>Authorized Signature & Stamp: ____________________</div>
                     </div>
                 </div>
+
                 <div class="text-center">
-                    <button onclick="window.print()" id="printBtn" class="hidden px-6 py-2 bg-gray-700 hover:bg-gray-600 text-white font-bold rounded-lg">Print Invoice</button>
+                    <button onclick="window.print()" id="printBtn" class="hidden px-6 py-2.5 bg-gray-800 hover:bg-gray-700 text-white font-bold rounded-lg transition">Print A4 Invoice</button>
                 </div>
             </div>
 
             <!-- TAB 4: CASH BOOK -->
             <div id="tab-cashbook" class="hidden space-y-6">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    <div class="bg-gray-800 border border-gray-700 p-6 rounded-xl shadow">
+                    <div class="bg-gray-900 border border-gray-800 p-6 rounded-xl shadow">
                         <h2 class="text-xl font-bold text-red-400 mb-4">Add Business Expense</h2>
                         <form onsubmit="addExpense(event)" class="space-y-4">
-                            <input type="text" id="expenseReason" placeholder="Expense Reason (e.g. Electricity Bill)" required class="w-full px-4 py-2 bg-gray-900 border border-gray-700 rounded-lg">
-                            <input type="number" id="expenseAmount" placeholder="Amount (PKR)" required class="w-full px-4 py-2 bg-gray-900 border border-gray-700 rounded-lg">
-                            <button type="submit" class="w-full py-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg">Record Expense</button>
+                            <input type="text" id="expReason" placeholder="Expense Reason (e.g. Electric Bill)" required class="w-full px-4 py-2 bg-gray-950 border border-gray-800 rounded-lg">
+                            <input type="number" id="expAmount" placeholder="Amount (PKR)" required class="w-full px-4 py-2 bg-gray-950 border border-gray-800 rounded-lg">
+                            <button type="submit" class="w-full py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg transition">Save Expense</button>
                         </form>
                     </div>
-                    <div class="bg-gray-800 border border-gray-700 p-6 rounded-xl shadow">
+                    <div class="bg-gray-900 border border-gray-800 p-6 rounded-xl shadow">
                         <h2 class="text-xl font-bold text-green-400 mb-4">Cash Summary</h2>
-                        <div class="space-y-3">
-                            <div class="flex justify-between border-b border-gray-700 pb-2">
-                                <span class="text-gray-400">Total Income (Sales):</span>
-                                <span id="cashTotalIncome" class="font-bold text-blue-400">PKR 0</span>
+                        <div class="space-y-3 text-sm">
+                            <div class="flex justify-between border-b border-gray-800 pb-2">
+                                <span class="text-gray-400">Total Cash Received (Sales):</span>
+                                <span id="cbIncome" class="font-bold text-blue-400">PKR 0</span>
                             </div>
-                            <div class="flex justify-between border-b border-gray-700 pb-2">
+                            <div class="flex justify-between border-b border-gray-800 pb-2">
                                 <span class="text-gray-400">Total Expenses:</span>
-                                <span id="cashTotalExpenses" class="font-bold text-red-400">PKR 0</span>
+                                <span id="cbExpense" class="font-bold text-red-400">PKR 0</span>
                             </div>
-                            <div class="flex justify-between pt-2 text-lg">
+                            <div class="flex justify-between pt-2 text-base">
                                 <span class="font-bold text-gray-200">Net Cash in Hand:</span>
-                                <span id="cashNetBalance" class="font-black text-emerald-400">PKR 0</span>
+                                <span id="cbNet" class="font-black text-emerald-400">PKR 0</span>
                             </div>
                         </div>
                     </div>
+                </div>
+
+                <div class="bg-gray-900 border border-gray-800 p-6 rounded-xl shadow overflow-x-auto">
+                    <h2 class="text-xl font-bold text-red-400 mb-4">Expense Records</h2>
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead>
+                            <tr class="border-b border-gray-800 text-gray-400">
+                                <th class="p-3">Date</th>
+                                <th class="p-3">Reason</th>
+                                <th class="p-3">Amount</th>
+                                <th class="p-3">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="expenseTable"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB 5: UDHAR KHATA -->
+            <div id="tab-udhar" class="hidden space-y-6">
+                <div class="bg-gray-900 border border-gray-800 p-6 rounded-xl shadow overflow-x-auto">
+                    <h2 class="text-xl font-bold text-amber-400 mb-4">Customer Udhar / Credit Khata</h2>
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead>
+                            <tr class="border-b border-gray-800 text-gray-400">
+                                <th class="p-3">Customer Name</th>
+                                <th class="p-3">Phone</th>
+                                <th class="p-3">Bike Model</th>
+                                <th class="p-3">Total Price</th>
+                                <th class="p-3">Paid</th>
+                                <th class="p-3">Remaining Udhar</th>
+                                <th class="p-3">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="udharTable"></tbody>
+                    </table>
                 </div>
             </div>
 
         </main>
     </div>
 
+    <!-- JavaScript Application Logic -->
     <script>
-        let db = JSON.parse(localStorage.getItem('evee_db')) || {
+        let db = JSON.parse(localStorage.getItem('evee_db_portal')) || {
             stock: [],
             sales: [],
             expenses: []
         };
 
         function saveData() {
-            localStorage.setItem('evee_db', JSON.stringify(db));
+            localStorage.setItem('evee_db_portal', JSON.stringify(db));
             updateDashboard();
         }
 
@@ -225,26 +288,28 @@
         }
 
         function switchTab(tabName) {
-            ['dashboard', 'stock', 'sales', 'cashbook'].forEach(t => {
+            ['dashboard', 'purchase', 'sales', 'cashbook', 'udhar'].forEach(t => {
                 document.getElementById('tab-' + t).classList.add('hidden');
             });
             document.getElementById('tab-' + tabName).classList.remove('hidden');
-            if (tabName === 'stock') renderStock();
+            if (tabName === 'purchase') renderStock();
             if (tabName === 'sales') updateStockDropdown();
-            if (tabName === 'cashbook') updateCashBook();
+            if (tabName === 'cashbook') renderExpenses();
+            if (tabName === 'udhar') renderUdhar();
         }
 
-        function addStockItem(e) {
+        // Stock Functions
+        function addStock(e) {
             e.preventDefault();
-            const newItem = {
+            const item = {
                 id: Date.now(),
-                model: document.getElementById('stockModel').value,
-                chassis: document.getElementById('stockChassis').value,
-                motor: document.getElementById('stockMotor').value,
-                price: parseFloat(document.getElementById('stockPrice').value),
+                model: document.getElementById('pModel').value,
+                chassis: document.getElementById('pChassis').value,
+                motor: document.getElementById('pMotor').value,
+                price: parseFloat(document.getElementById('pPrice').value),
                 status: 'Available'
             };
-            db.stock.push(newItem);
+            db.stock.push(item);
             saveData();
             e.target.reset();
             renderStock();
@@ -252,106 +317,171 @@
         }
 
         function renderStock() {
-            const tbody = document.getElementById('stockTableBody');
+            const tbody = document.getElementById('stockTable');
             tbody.innerHTML = '';
             db.stock.forEach(item => {
                 tbody.innerHTML += `
-                    <tr class="border-b border-gray-700 text-sm">
+                    <tr class="border-b border-gray-800 text-sm">
                         <td class="p-3">${item.model}</td>
                         <td class="p-3">${item.chassis}</td>
                         <td class="p-3">${item.motor}</td>
-                        <td class="p-3">${item.price}</td>
-                        <td class="p-3"><span class="px-2 py-1 rounded text-xs ${item.status === 'Available' ? 'bg-green-900 text-green-300' : 'bg-gray-700 text-gray-400'}">${item.status}</span></td>
-                        <td class="p-3"><button onclick="deleteStock(${item.id})" class="text-red-400 hover:text-red-300">Delete</button></td>
+                        <td class="p-3">PKR ${item.price.toLocaleString()}</td>
+                        <td class="p-3"><span class="px-2 py-1 rounded text-xs ${item.status === 'Available' ? 'bg-green-950 text-green-300 border border-green-800' : 'bg-gray-800 text-gray-400'}">${item.status}</span></td>
+                        <td class="p-3"><button onclick="deleteStock(${item.id})" class="text-red-400 hover:text-red-300 font-medium">Delete</button></td>
                     </tr>
                 `;
             });
         }
 
         function deleteStock(id) {
-            db.stock = db.stock.filter(i => i.id !== id);
-            saveData();
-            renderStock();
+            if (confirm('Are you sure you want to delete this stock item?')) {
+                db.stock = db.stock.filter(i => i.id !== id);
+                saveData();
+                renderStock();
+            }
         }
 
         function updateStockDropdown() {
             const select = document.getElementById('saleStockSelect');
-            select.innerHTML = '<option value="">Select Available Bike</option>';
+            select.innerHTML = '<option value="">Select Available Bike from Stock</option>';
             db.stock.filter(i => i.status === 'Available').forEach(item => {
-                select.innerHTML += `<option value="${item.id}">${item.model} (Chassis: ${item.chassis})</option>`;
+                select.innerHTML += `<option value="${item.id}">${item.model} | Chassis: ${item.chassis}</option>`;
             });
         }
 
+        // Sales Functions
         function createSale(e) {
             e.preventDefault();
             const stockId = document.getElementById('saleStockSelect').value;
             if (!stockId) {
-                alert('Please select a bike from stock!');
+                alert('Please select a bike!');
                 return;
             }
             const stockItem = db.stock.find(i => i.id == stockId);
             stockItem.status = 'Sold';
 
+            const totalPrice = parseFloat(document.getElementById('sPrice').value);
+            const paid = parseFloat(document.getElementById('paidAmount').value);
             const saleData = {
                 id: Date.now(),
-                customerName: document.getElementById('customerName').value,
-                customerPhone: document.getElementById('customerPhone').value,
+                custName: document.getElementById('cName').value,
+                custPhone: document.getElementById('cPhone').value,
                 model: stockItem.model,
                 chassis: stockItem.chassis,
                 motor: stockItem.motor,
-                price: parseFloat(document.getElementById('salePrice').value),
+                price: totalPrice,
+                paidAmount: paid,
+                remaining: totalPrice - paid,
+                type: document.getElementById('paymentType').value,
                 date: new Date().toLocaleDateString()
             };
             db.sales.push(saleData);
             saveData();
 
-            // Populate Invoice
-            document.getElementById('invCustomer').innerText = saleData.customerName;
+            // Populate Invoice View
+            document.getElementById('invNo').innerText = 'INV-' + String(saleData.id).slice(-6);
             document.getElementById('invDate').innerText = saleData.date;
+            document.getElementById('invCustName').innerText = saleData.custName;
+            document.getElementById('invCustPhone').innerText = saleData.custPhone;
             document.getElementById('invModel').innerText = saleData.model;
             document.getElementById('invChassis').innerText = saleData.chassis;
             document.getElementById('invMotor').innerText = saleData.motor;
-            document.getElementById('invAmount').innerText = saleData.price.toLocaleString();
-            document.getElementById('invTotal').innerText = saleData.price.toLocaleString();
+            document.getElementById('invPrice').innerText = totalPrice.toLocaleString();
+            document.getElementById('invTotal').innerText = totalPrice.toLocaleString();
+            document.getElementById('invPaid').innerText = paid.toLocaleString();
+            document.getElementById('invRemaining').innerText = saleData.remaining.toLocaleString();
+            document.getElementById('invPayStatus').innerText = saleData.remaining === 0 ? 'Fully Paid (Cash)' : 'Partial / Udhar';
 
             document.getElementById('printableInvoice').classList.remove('hidden');
             document.getElementById('printBtn').classList.remove('hidden');
             e.target.reset();
             updateStockDropdown();
-            alert('Sale completed and invoice generated successfully!');
+            alert('Sale completed & invoice generated!');
         }
 
+        // Expense Functions
         function addExpense(e) {
             e.preventDefault();
             const exp = {
                 id: Date.now(),
-                reason: document.getElementById('expenseReason').value,
-                amount: parseFloat(document.getElementById('expenseAmount').value),
+                reason: document.getElementById('expReason').value,
+                amount: parseFloat(document.getElementById('expAmount').value),
                 date: new Date().toLocaleDateString()
             };
             db.expenses.push(exp);
             saveData();
             e.target.reset();
-            updateCashBook();
-            alert('Expense recorded successfully!');
+            renderExpenses();
+            alert('Expense recorded!');
         }
 
-        function updateCashBook() {
-            const totalIncome = db.sales.reduce((sum, s) => sum + s.price, 0);
-            const totalExpenses = db.expenses.reduce((sum, ex) => sum + ex.amount, 0);
-            document.getElementById('cashTotalIncome').innerText = 'PKR ' + totalIncome.toLocaleString();
-            document.getElementById('cashTotalExpenses').innerText = 'PKR ' + totalExpenses.toLocaleString();
-            document.getElementById('cashNetBalance').innerText = 'PKR ' + (totalIncome - totalExpenses).toLocaleString();
+        function renderExpenses() {
+            const tbody = document.getElementById('expenseTable');
+            tbody.innerHTML = '';
+            db.expenses.forEach(ex => {
+                tbody.innerHTML += `
+                    <tr class="border-b border-gray-800">
+                        <td class="p-3">${ex.date}</td>
+                        <td class="p-3">${ex.reason}</td>
+                        <td class="p-3 text-red-400">PKR ${ex.amount.toLocaleString()}</td>
+                        <td class="p-3"><button onclick="deleteExpense(${ex.id})" class="text-red-400 hover:text-red-300">Delete</button></td>
+                    </tr>
+                `;
+            });
         }
 
+        function deleteExpense(id) {
+            db.expenses = db.expenses.filter(e => e.id !== id);
+            saveData();
+            renderExpenses();
+        }
+
+        // Udhar Khata
+        function renderUdhar() {
+            const tbody = document.getElementById('udharTable');
+            tbody.innerHTML = '';
+            const udharList = db.sales.filter(s => s.remaining > 0);
+            udharList.forEach(s => {
+                tbody.innerHTML += `
+                    <tr class="border-b border-gray-800">
+                        <td class="p-3 font-semibold">${s.custName}</td>
+                        <td class="p-3">${s.custPhone}</td>
+                        <td class="p-3">${s.model}</td>
+                        <td class="p-3">PKR ${s.price.toLocaleString()}</td>
+                        <td class="p-3 text-green-400">PKR ${s.paidAmount.toLocaleString()}</td>
+                        <td class="p-3 text-red-400 font-bold">PKR ${s.remaining.toLocaleString()}</td>
+                        <td class="p-3"><button onclick="clearUdhar(${s.id})" class="px-3 py-1 bg-green-600 hover:bg-green-700 text-white rounded text-xs font-bold">Mark Clear</button></td>
+                    </tr>
+                `;
+            });
+        }
+
+        function clearUdhar(id) {
+            const sale = db.sales.find(s => s.id === id);
+            if (sale) {
+                sale.paidAmount = sale.price;
+                sale.remaining = 0;
+                saveData();
+                renderUdhar();
+                alert('Udhar marked as fully cleared!');
+            }
+        }
+
+        // Dashboard Stats
         function updateDashboard() {
-            const totalStock = db.stock.filter(i => i.status === 'Available').length;
-            const totalSales = db.sales.reduce((sum, s) => sum + s.price, 0);
-            const totalExpenses = db.expenses.reduce((sum, ex) => sum + ex.amount, 0);
-            document.getElementById('statTotalStock').innerText = totalStock;
-            document.getElementById('statTotalSales').innerText = 'PKR ' + totalSales.toLocaleString();
-            document.getElementById('statCashInHand').innerText = 'PKR ' + (totalSales - totalExpenses).toLocaleString();
-            document.getElementById('statTotalExpenses').innerText = 'PKR ' + totalExpenses.toLocaleString();
+            const availStock = db.stock.filter(i => i.status === 'Available').length;
+            const totalSalesRev = db.sales.reduce((sum, s) => sum + s.paidAmount, 0);
+            const totalExp = db.expenses.reduce((sum, e) => sum + e.amount, 0);
+            const totalUdharAmt = db.sales.reduce((sum, s) => sum + s.remaining, 0);
+
+            document.getElementById('statStock').innerText = availStock;
+            document.getElementById('statSales').innerText = 'PKR ' + db.sales.reduce((sum, s) => sum + s.price, 0).toLocaleString();
+            document.getElementById('statCash').innerText = 'PKR ' + (totalSalesRev - totalExp).toLocaleString();
+            document.getElementById('statUdhar').innerText = 'PKR ' + totalUdharAmt.toLocaleString();
+
+            document.getElementById('cbIncome').innerText = 'PKR ' + totalSalesRev.toLocaleString();
+            document.getElementById('cbExpense').innerText = 'PKR ' + totalExp.toLocaleString();
+            document.getElementById('cbNet').innerText = 'PKR ' + (totalSalesRev - totalExp).toLocaleString();
         }
     </script>
 </body>
