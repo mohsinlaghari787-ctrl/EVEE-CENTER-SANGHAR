@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Evee Center Sanghar - Complete Business Portal</title>
+    <title>Evee Center Sanghar - Secure Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @media print {
@@ -14,11 +14,23 @@
     </style>
 </head>
 <body class="bg-gray-900 text-gray-100 font-sans p-4">
-    <div class="max-w-5xl mx-auto">
+
+    <!-- LOGIN SCREEN -->
+    <div id="loginScreen" class="max-w-md mx-auto mt-20 bg-gray-800 p-8 rounded-xl border border-gray-700 shadow-2xl text-center">
+        <h2 class="text-2xl font-bold text-emerald-400 mb-2">Evee Center Sanghar</h2>
+        <p class="text-sm text-gray-400 mb-6">پۆرٹल میں لاگ ان کرنے کے لیے پاسవర్د درج کریں</p>
+        <input type="password" id="loginPassword" placeholder="पासवर्ड दर्ज करें (Password)" class="w-full bg-gray-900 border border-gray-700 p-3 rounded-lg text-white mb-4 text-center">
+        <button onclick="checkLogin()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold p-3 rounded-lg transition">لاگ ان کریں</button>
+        <p id="loginError" class="text-red-500 text-sm mt-3 hidden">गलत पासवर्ड! कृपया सही पासवर्ड डालें।</p>
+    </div>
+
+    <!-- MAIN APP (Hidden until login) -->
+    <div id="mainApp" class="max-w-5xl mx-auto hidden">
         <!-- Header -->
-        <header class="bg-gray-800 p-6 rounded-xl shadow-md mb-6 text-center border border-gray-700">
+        <header class="bg-gray-800 p-6 rounded-xl shadow-md mb-6 text-center border border-gray-700 relative">
+            <button onclick="logout()" class="absolute left-4 top-4 bg-red-600 hover:bg-red-500 text-white px-3 py-1 rounded text-sm">لاگ آउट</button>
             <h1 class="text-3xl font-bold text-emerald-400">Evee Center Sanghar</h1>
-            <p class="text-base text-gray-300 mt-1">नवाबशाह रोड, संगर</p>
+            <p class="text-base text-gray-300 mt-1">نवाबशाह रोड, संगर</p>
             <p class="text-sm text-gray-400 mt-1">प्रोप्राइटर: गुलाम शब्बीर | मोबाइल: 03332921575</p>
         </header>
 
@@ -238,12 +250,45 @@
     </div>
 
     <script>
-        // LocalStorage Data Init
-        let stock = JSON.parse(localStorage.getItem('evee_stock_v4')) || [];
-        let sales = JSON.parse(localStorage.getItem('evee_sales_v4')) || [];
-        let purchases = JSON.parse(localStorage.getItem('evee_purchase_v4')) || [];
-        let cashbook = JSON.parse(localStorage.getItem('evee_cash_v4')) || [];
-        let expenses = JSON.parse(localStorage.getItem('evee_expense_v4')) || [];
+        // पासवर्ड सेट करें (आप चाहें तो 'evee123' की जगह अपना कोई भी पासवर्ड रख सकते हैं)
+        const ADMIN_PASSWORD = "evee123";
+
+        function checkLogin() {
+            const pass = document.getElementById('loginPassword').value;
+            if(pass === ADMIN_PASSWORD) {
+                localStorage.setItem('evee_logged_in', 'true');
+                showApp();
+            } else {
+                document.getElementById('loginError').classList.remove('hidden');
+            }
+        }
+
+        function showApp() {
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('mainApp').classList.remove('hidden');
+            renderStock();
+            renderSales();
+            renderPurchase();
+            renderCashBook();
+            renderExpense();
+        }
+
+        function logout() {
+            localStorage.removeItem('evee_logged_in');
+            location.reload();
+        }
+
+        window.onload = function() {
+            if(localStorage.getItem('evee_logged_in') === 'true') {
+                showApp();
+            }
+        }
+
+        let stock = JSON.parse(localStorage.getItem('evee_stock_v5')) || [];
+        let sales = JSON.parse(localStorage.getItem('evee_sales_v5')) || [];
+        let purchases = JSON.parse(localStorage.getItem('evee_purchase_v5')) || [];
+        let cashbook = JSON.parse(localStorage.getItem('evee_cash_v5')) || [];
+        let expenses = JSON.parse(localStorage.getItem('evee_expense_v5')) || [];
 
         function switchTab(tabName) {
             ['stock', 'sales', 'purchase', 'cashbook', 'expense'].forEach(t => {
@@ -254,7 +299,6 @@
             document.getElementById('btn-' + tabName).className = "bg-emerald-600 px-4 py-2 rounded-lg font-bold text-white transition";
         }
 
-        // STOCK FUNCTIONS
         function renderStock() {
             const tbody = document.getElementById('stockTableBody');
             if (stock.length === 0) {
@@ -289,7 +333,7 @@
                 stock[editIndex] = { model, chassis, motor, price };
                 resetStockForm();
             }
-            localStorage.setItem('evee_stock_v4', JSON.stringify(stock));
+            localStorage.setItem('evee_stock_v5', JSON.stringify(stock));
             clearStockInputs();
             renderStock();
         }
@@ -309,7 +353,7 @@
         function deleteStock(index) {
             if(confirm('डिलीट करना चाहते हैं?')) {
                 stock.splice(index, 1);
-                localStorage.setItem('evee_stock_v4', JSON.stringify(stock));
+                localStorage.setItem('evee_stock_v5', JSON.stringify(stock));
                 renderStock();
             }
         }
@@ -329,7 +373,6 @@
             document.getElementById('sPrice').value = '';
         }
 
-        // SALES & INVOICE FUNCTIONS
         function renderSales() {
             const tbody = document.getElementById('salesTableBody');
             if (sales.length === 0) {
@@ -358,7 +401,7 @@
             if(!customer || !model || !amount) { alert('सभी फील्ड भरें!'); return; }
 
             sales.push({ customer, phone, model, amount, date: new Date().toLocaleDateString() });
-            localStorage.setItem('evee_sales_v4', JSON.stringify(sales));
+            localStorage.setItem('evee_sales_v5', JSON.stringify(sales));
             document.getElementById('saleCustomer').value = '';
             document.getElementById('salePhone').value = '';
             document.getElementById('saleModel').value = '';
@@ -369,7 +412,7 @@
         function deleteSale(index) {
             if(confirm('डिलीट करना चाहते हैं?')) {
                 sales.splice(index, 1);
-                localStorage.setItem('evee_sales_v4', JSON.stringify(sales));
+                localStorage.setItem('evee_sales_v5', JSON.stringify(sales));
                 renderSales();
             }
         }
@@ -389,7 +432,6 @@
             document.getElementById('invoiceModal').classList.add('hidden');
         }
 
-        // PURCHASE FUNCTIONS
         function renderPurchase() {
             const tbody = document.getElementById('purchaseTableBody');
             if (purchases.length === 0) {
@@ -412,7 +454,7 @@
             const cost = document.getElementById('pCost').value;
             if(!supplier || !item || !cost) { alert('सभी फील्ड भरें!'); return; }
             purchases.push({ supplier, item, cost });
-            localStorage.setItem('evee_purchase_v4', JSON.stringify(purchases));
+            localStorage.setItem('evee_purchase_v5', JSON.stringify(purchases));
             document.getElementById('pSupplier').value = '';
             document.getElementById('pItem').value = '';
             document.getElementById('pCost').value = '';
@@ -421,11 +463,10 @@
 
         function deletePurchase(index) {
             purchases.splice(index, 1);
-            localStorage.setItem('evee_purchase_v4', JSON.stringify(purchases));
+            localStorage.setItem('evee_purchase_v5', JSON.stringify(purchases));
             renderPurchase();
         }
 
-        // CASH BOOK FUNCTIONS
         function renderCashBook() {
             const tbody = document.getElementById('cashTableBody');
             if (cashbook.length === 0) {
@@ -443,12 +484,12 @@
         }
 
         function saveCashBook() {
-            const desc = document.getElementById('cDesc').value;
+            const desc = document.getElementById('cDesc.value') || document.getElementById('cDesc').value;
             const amount = document.getElementById('cAmount').value;
             const type = document.getElementById('cType').value;
             if(!desc || !amount) { alert('सभी फील्ड भरें!'); return; }
             cashbook.push({ desc, amount, type });
-            localStorage.setItem('evee_cash_v4', JSON.stringify(cashbook));
+            localStorage.setItem('evee_cash_v5', JSON.stringify(cashbook));
             document.getElementById('cDesc').value = '';
             document.getElementById('cAmount').value = '';
             renderCashBook();
@@ -456,11 +497,10 @@
 
         function deleteCash(index) {
             cashbook.splice(index, 1);
-            localStorage.setItem('evee_cash_v4', JSON.stringify(cashbook));
+            localStorage.setItem('evee_cash_v5', JSON.stringify(cashbook));
             renderCashBook();
         }
 
-        // EXPENSE FUNCTIONS
         function renderExpense() {
             const tbody = document.getElementById('expenseTableBody');
             if (expenses.length === 0) {
@@ -481,7 +521,7 @@
             const amount = document.getElementById('eAmount').value;
             if(!title || !amount) { alert('सभी फील्ड भरें!'); return; }
             expenses.push({ title, amount });
-            localStorage.setItem('evee_expense_v4', JSON.stringify(expenses));
+            localStorage.setItem('evee_expense_v5', JSON.stringify(expenses));
             document.getElementById('eTitle').value = '';
             document.getElementById('eAmount').value = '';
             renderExpense();
@@ -489,16 +529,9 @@
 
         function deleteExpense(index) {
             expenses.splice(index, 1);
-            localStorage.setItem('evee_expense_v4', JSON.stringify(expenses));
+            localStorage.setItem('evee_expense_v5', JSON.stringify(expenses));
             renderExpense();
         }
-
-        // Initial Load
-        renderStock();
-        renderSales();
-        renderPurchase();
-        renderCashBook();
-        renderExpense();
     </script>
 </body>
 </html>
